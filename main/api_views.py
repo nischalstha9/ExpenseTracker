@@ -3,6 +3,17 @@ from .models import Transaction, Balance
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, CreateAPIView, RetrieveAPIView
 from django.http import JsonResponse
 from django.utils import timezone
+from rest_framework import permissions
+from rest_framework.filters import SearchFilter
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework.decorators import api_view
+from django_filters import rest_framework as filters
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 40
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -31,6 +42,9 @@ def BalanceAPIView(request):
 class TransactionListAPIView(ListCreateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['description']
+    pagination_class = StandardResultsSetPagination
 
 
 class TransactionOpenAPIView(RetrieveUpdateDestroyAPIView):

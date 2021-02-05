@@ -22,7 +22,6 @@ $(function () {
     $.ajax({
       url: "/mybalance/",
       success: function (result) {
-        console.log(result);
         $("#balance_amt").html(result.balance);
       },
       error: function (err) {
@@ -33,6 +32,7 @@ $(function () {
       url: "/my-tasks/",
       success: function (result) {
         var tdata = "";
+        result = result.results;
         $.each(result, function (index, tran) {
           var style = tran._type == "DEBIT" ? "table-success" : "table-danger";
           tdata += `<tr class="${style}" id='${tran.id}'>
