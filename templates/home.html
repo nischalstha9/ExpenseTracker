@@ -99,6 +99,39 @@
 
 <h1>Your Balance: Rs. <span id='balance_amt'>0</span>/- </h1>
 <hr>
+
+<form action="" method="get" id='filter-form'>
+    <div class="form-row">
+    <div class="form-group col-md-3">
+      <label for="inputState"><h6>Type:</h6></label>
+      <select class="custom-select" id='Transasction_Filter'>
+        <option value="">All Transactions</option>
+        <option value="DEBIT">Income</option>
+        <option value="CREDIT">Expenses</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-3">
+    <label for="inputState"><h6>Start Date:</h6></label>
+      <input type="date" autocomplete="false" class='form-control' id='sdate-filter'>
+    </div>
+
+    <div class="form-group col-md-3">
+    <label for="inputState"><h6>End Date:</h6></label>
+      <input type="date" autocomplete="false" class='form-control' id='edate-filter'>
+    </div>
+
+    <div class="form-group col-md-3">
+    <label for="inputState"><h6></h6></label>
+      <input type="button" autocomplete="false" class='btn btn-secondary' id='clear-filter' value='Clear Filters'>
+    </div>
+
+    <div class="form-group col-md-4">
+      <input type="text" autocomplete="false" class='form-control' id='search-filter' placeholder='Search By Description'>
+    </div>
+
+</form>
+
 <div class="sticky-top fixed-top bg-light">
 <button type="button" class="btn btn-warning" id='add-trans-btn'>
   Add Income
@@ -121,6 +154,7 @@
   <tbody id='tbody'>
   </tbody>
 </table>
+<span class="pagination-span"></span>
 {% endblock content %}
 {% block javascript %}
     <script src="{% static 'main/home.js' %}"></script>

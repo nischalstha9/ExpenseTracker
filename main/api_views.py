@@ -42,9 +42,11 @@ def BalanceAPIView(request):
 class TransactionListAPIView(ListCreateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ['description']
     pagination_class = StandardResultsSetPagination
+    filterset_fields = {
+        'date': ['gte', 'lte', 'date__range'], '_type': {'exact'}, }
 
 
 class TransactionOpenAPIView(RetrieveUpdateDestroyAPIView):

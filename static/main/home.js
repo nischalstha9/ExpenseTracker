@@ -1,4 +1,13 @@
 $(function () {
+  $.ajax({
+    url: "/mybalance/",
+    success: function (result) {
+      $("#balance_amt").html(result.balance);
+    },
+    error: function (err) {
+      console.log(err);
+    },
+  });
   //CSRF FUNCTION
   function getCookie(name) {
     let cookieValue = null;
@@ -18,18 +27,15 @@ $(function () {
   const csrftoken = getCookie("csrftoken");
 
   //TABLE DATA RETRIEVER
-  function getTableData() {
+  function getTableData(page = 1, trans_type = "", date = ", ", search = "") {
+    if (date != ", ") {
+      var url = `${window.location.protocol}//${window.location.host}/my-tasks/?page=${page}&_type=${trans_type}&date__date__range=${date}&search=${search}`;
+    } else {
+      var url = `${window.location.protocol}//${window.location.host}/my-tasks/?page=${page}&_type=${trans_type}&search=${search}`;
+    }
+    console.log(url);
     $.ajax({
-      url: "/mybalance/",
-      success: function (result) {
-        $("#balance_amt").html(result.balance);
-      },
-      error: function (err) {
-        console.log(err);
-      },
-    });
-    $.ajax({
-      url: "/my-tasks/",
+      url: url,
       success: function (result) {
         var tdata = "";
         result = result.results;
@@ -41,7 +47,7 @@ $(function () {
                   <td>${tran.amount}</td>
                   <td>
                       <div class="btn-group btn-group-small">
-                          <button class='btn btn-small btn-warning tran-edit' data-id='${tran.id}' data-desc='${tran.description}' data-amount='${tran.amount}' data-type='${tran._type}'>&#9998;</button>
+                          <button class='btn btn-small tran-edit' data-id='${tran.id}' data-desc='${tran.description}' data-amount='${tran.amount}' data-type='${tran._type}'>&#9998;</button>
                           
                       </div>
                   </td>
@@ -55,6 +61,50 @@ $(function () {
     });
   }
   getTableData();
+
+  //FILTERS
+  var search = "";
+  var page = 1;
+  var trans_type = "";
+  var sdate = "";
+  var edate = "";
+  var date = sdate + ", " + edate;
+  $("#Transasction_Filter").change(function (e) {
+    page = 1;
+    trans_type = e.target.value;
+    getTableData(page, trans_type, date, search);
+  });
+  $("#sdate-filter").change(function (e) {
+    page = 1;
+    sdate = e.target.value;
+    if (edate == "" || edate < sdate) {
+      edate = sdate;
+    }
+    date = sdate + ", " + edate;
+    getTableData(page, trans_type, date, search);
+  });
+  $("#edate-filter").change(function (e) {
+    page = 1;
+    edate = e.target.value;
+    if (sdate == "" || sdate > edate) {
+      sdate = edate;
+    }
+    date = sdate + ", " + edate;
+    getTableData(page, trans_type, date, search);
+  });
+  $("#search-filter").keypress(function (e) {
+    if (e.which == 13) {
+      e.preventDefault();
+      page = 1;
+      search = e.target.value;
+      getTableData(page, trans_type, date, search);
+    }
+  });
+  $("#clear-filter").click(function () {
+    page = 1;
+    $("#filter-form")[0].reset();
+    getTableData((page = 1), (trans_type = ""), (date = ","), (search = ""));
+  });
 
   // MODAL TOGGLER
   $("#add-trans-btn").click(function () {
