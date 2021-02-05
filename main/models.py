@@ -1,60 +1,72 @@
-# from django.db import models
-
-# from django.utils import timezone
-# from django.contrib.auth.models import User
-# from django.urls import reverse
-# from django.db.models import Q
-# from PIL import Image
-# # Create your models here.
-# #database model for posts
-# class PostManager(models.Manager):
-#     def search(self, query=None):
-#         qs = self.get_queryset()
-#         if query is not None:
-#             or_lookup = (Q(title__icontains=query, active=True) | 
-#                          Q(content__icontains=query, active=True)
-#                         )
-#             qs = qs.filter(or_lookup).distinct() # distinct() is often necessary with Q lookups
-#         return qs
-
-# class BlogCategory(models.Model):
-#     title=models.CharField(max_length=120)
-#     def __str__(self):
-#         return self.title
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
 
-# class Post(models.Model):
-#     title = models.CharField(max_length=100)
-#     content = models.TextField()
-#     date_posted= models.DateTimeField(auto_now_add=True)   #for adding date posted permanent
-#     last_modified = models.DateTimeField(auto_now=True, blank=True)   #for adding date modified
-#     author=models.ForeignKey(User, on_delete=models.CASCADE)
-#     objects = PostManager()
-#     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
-#     category = models.ForeignKey(BlogCategory,on_delete=models.CASCADE, blank=True,null=True, related_name='categories')
-#     active=models.BooleanField(blank=False, default=0)
-#     cover_image=models.ImageField(blank=True,null=True,upload_to='blog_images')
-#     youtube = models.CharField(max_length=1000,blank=True,null=True)
-#     image_caption = models.CharField(blank=True,max_length=120)
+class Balance(models.Model):
+    balance = models.IntegerField(_("Balance"), default=0)
+    user = models.OneToOneField(User, verbose_name=_(
+        "Owner"), on_delete=models.CASCADE)
 
-#     def __str__(self):
-#         return self.title
+    class Meta:
+        verbose_name = _("Balance")
+        verbose_name_plural = _("Balances")
 
-#     def get_absolute_url(self):
-#         if self.active == True:
-#             return reverse('post-detail',kwargs={'pk':self.pk })
-#         else:
-#             return reverse('user-drafts',kwargs={'username':self.author })
+    def __str__(self):
+        return self.user.username
 
-#     def get_like_url(self):
-#         return reverse("post-like-toggle", kwargs={'pk':self.pk})
-    
-#     def save(self,*args,**kwargs):
-#         super().save(*args,**kwargs)
+    def get_absolute_url(self):
+        return reverse("Balance_detail", kwargs={"pk": self.pk})
 
-#         if self.cover_image:
-#             img = Image.open(self.cover_image.path)
-#             if img.height > 1920 or img.width > 1920:
-#                 output_size= (1920,1920)
-#                 img.thumbnail(output_size)
-#                 img.save(self.cover_image.path)
+
+class Transaction(models.Model):
+    class Types(models.TextChoices):
+        #TYPE_SNTX = TYPE_VALUE, TYPE_NAME
+        DEBIT = "DEBIT", "Debit"
+        CREDIT = "CREDIT", "Credit"
+    date = models.DateTimeField(_("Date"), auto_now_add=True)
+    base_type = Types.DEBIT
+    amount = models.PositiveIntegerField(_("Amount"))
+    description = models.TextField(_("Description"))
+    user = models.ForeignKey(User, verbose_name=_(
+        "Owner"), on_delete=models.CASCADE)
+    _type = models.CharField(
+        _("Type"), max_length=50, choices=Types.choices, default=base_type
+    )
+
+    class Meta:
+        verbose_name = _("Transaction")
+        verbose_name_plural = _("Transactions")
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.user.username} => {self.amount}"
+
+    def get_absolute_url(self):
+        return reverse("Transaction_detail", kwargs={"pk": self.pk})
+
+
+class DebitManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(_type=Transaction.Types.DEBIT)
+
+
+class Debit(Transaction):
+    base_type = Transaction.Types.DEBIT
+    objects = DebitManager()
+
+    class Meta:
+        proxy = True
+
+
+class CreditManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(_type=Transaction.Types.CREDIT)
+
+
+class Credit(Transaction):
+    base_type = Transaction.Types.CREDIT
+    objects = CreditManager()
+
+    class Meta:
+        proxy = True
