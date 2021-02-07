@@ -1,13 +1,16 @@
 $(function () {
-  $.ajax({
-    url: "/mybalance/",
-    success: function (result) {
-      $("#balance_amt").html(result.balance);
-    },
-    error: function (err) {
-      console.log(err);
-    },
-  });
+  function getBalance() {
+    $.ajax({
+      url: "/mybalance/",
+      success: function (result) {
+        $("#balance_amt").html(result.balance);
+      },
+      error: function (err) {
+        console.log(err);
+      },
+    });
+  }
+  getBalance();
   //CSRF FUNCTION
   function getCookie(name) {
     let cookieValue = null;
@@ -33,13 +36,17 @@ $(function () {
     } else {
       var url = `${window.location.protocol}//${window.location.host}/my-tasks/?page=${page}&_type=${trans_type}&search=${search}`;
     }
-    console.log(url);
     $.ajax({
       url: url,
       success: function (result) {
+        console.log(result);
         var tdata = "";
-        result = result.results;
-        $.each(result, function (index, tran) {
+        trans = result.results;
+        pages = Math.ceil(result.count / 10);
+        if (pages >= 1) {
+          paginationHtml(pages);
+        }
+        $.each(trans, function (index, tran) {
           var style = tran._type == "DEBIT" ? "table-success" : "table-danger";
           tdata += `<tr class="${style}" id='${tran.id}'>
                   <th scope="row">${tran.date}</th>
@@ -103,7 +110,7 @@ $(function () {
   $("#clear-filter").click(function () {
     page = 1;
     $("#filter-form")[0].reset();
-    getTableData((page = 1), (trans_type = ""), (date = ","), (search = ""));
+    getTableData((page = 1), (trans_type = ""), (date = ""), (search = ""));
   });
 
   // MODAL TOGGLER
@@ -141,7 +148,8 @@ $(function () {
     const amount = $("#AmountText").val();
     create_transaction(description, amount, "DEBIT");
     $("#addIncomeModal").modal("toggle");
-    getTableData();
+    getTableData(page, trans_type, date, search);
+    getBalance();
     $("#income_form").trigger("reset");
   });
 
@@ -152,7 +160,8 @@ $(function () {
     const amount = $("#expAmountText").val();
     create_transaction(description, amount, "CREDIT");
     $("#addExpenseModal").modal("toggle");
-    getTableData();
+    getTableData(page, trans_type, date, search);
+    getBalance();
     $("#expense_form").trigger("reset");
   });
 
@@ -184,7 +193,8 @@ $(function () {
       },
       success: function () {
         console.log(t_id);
-        getTableData();
+        getTableData(page, trans_type, date, search);
+        getBalance();
         $("#editTransactionModal").modal("toggle");
       },
       error: function (err) {
@@ -203,11 +213,43 @@ $(function () {
       success: function () {
         console.log("DELETED");
         $("#editTransactionModal").modal("toggle");
-        getTableData();
+        getTableData(page, trans_type, date, search);
+        getBalance();
       },
       error: function (err) {
         console.log(err);
       },
     });
+  });
+
+  //PAGINATION FUCNTION
+  function paginationHtml(pages) {
+    var next =
+      page == pages
+        ? "<li class='page-item disabled'><a class='page-link' href='# id='nextBtn'>Next</a></li>"
+        : "<li class='page-item'><a class='page-link' href='#' id='nextBtn'>Next</a></li>";
+    var prev =
+      page == 1
+        ? "<li class='page-item disabled'><a class='page-link' href='#' id='previousBtn' tabindex='-1'>Previous</a></li>"
+        : "<li class='page-item'><a class='page-link' href='#' id='previousBtn' tabindex='-1'>Previous</a></li>";
+    var temp = `
+    <nav aria-label="...">
+    <ul class="pagination">
+        ${prev}
+        ${next}
+    </ul>
+    </nav>
+    `;
+    $(".pagination-span").html(temp);
+  }
+  $(".pagination-span").on("click", "#previousBtn", function (e) {
+    e.preventDefault();
+    page = page > 1 ? page - 1 : page;
+    getTableData(page, trans_type, date, search);
+  });
+  $(".pagination-span").on("click", "#nextBtn", function (e) {
+    e.preventDefault();
+    page = page != pages ? page + 1 : page;
+    getTableData(page, trans_type, date, search);
   });
 });
