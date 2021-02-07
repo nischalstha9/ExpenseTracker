@@ -44,7 +44,6 @@ $(function () {
         trans = result.results;
         count = result.count;
         pages = Math.ceil(count / 10);
-        console.log(pages);
         if (pages >= 1) {
           paginationHtml(pages);
         }
@@ -135,7 +134,12 @@ $(function () {
         _type: type,
       },
       success: function () {
-        console.log("POSTED");
+        $("#addExpenseModal").modal("hide");
+        $("#addIncomeModal").modal("hide");
+        $("#expense_form").trigger("reset");
+        $("#income_form").trigger("reset");
+        getTableData(page, trans_type, date, search);
+        getBalance();
       },
       error: function (err) {
         console.log(err);
@@ -149,10 +153,6 @@ $(function () {
     const description = $("#DescriptionText").val();
     const amount = $("#AmountText").val();
     create_transaction(description, amount, "DEBIT");
-    $("#addIncomeModal").modal("toggle");
-    getTableData(page, trans_type, date, search);
-    getBalance();
-    $("#income_form").trigger("reset");
   });
 
   // ADD EXPENSE
@@ -161,10 +161,6 @@ $(function () {
     const description = $("#expDescriptionText").val();
     const amount = $("#expAmountText").val();
     create_transaction(description, amount, "CREDIT");
-    $("#addExpenseModal").modal("toggle");
-    getTableData(page, trans_type, date, search);
-    getBalance();
-    $("#expense_form").trigger("reset");
   });
 
   // UPDATE
@@ -176,7 +172,6 @@ $(function () {
     type = e.target.dataset.type;
     var desc = e.target.dataset.desc;
     var amount = e.target.dataset.amount;
-    console.log(t_id, desc, amount, type);
     $("#editTransactionModal").modal("toggle");
     $("#editDescriptionText").val(desc);
     $("#editAmountText").val(amount);
@@ -194,7 +189,6 @@ $(function () {
         _type: type,
       },
       success: function () {
-        console.log(t_id);
         getTableData(page, trans_type, date, search);
         getBalance();
         $("#editTransactionModal").modal("toggle");
@@ -213,7 +207,6 @@ $(function () {
       url: `/tasks/${t_id}`,
       headers: { "X-CSRFToken": csrftoken },
       success: function () {
-        console.log("DELETED");
         $("#editTransactionModal").modal("toggle");
         if (count % 10 == 1) {
           page = page - 1;
@@ -245,9 +238,13 @@ $(function () {
     </ul>
     </nav>
     `;
-    pages > 1
-      ? $(".pagination-span").html(temp)
-      : $(".pagination-span").html("");
+    if (pages > 1) {
+      $(".pagination-span").html(temp);
+      $(".pagination-count-span").html(`Page ${page} of ${pages}`);
+    } else {
+      $(".pagination-span").html("");
+      $(".pagination-count-span").html("");
+    }
   }
   $(".pagination-span").on("click", "#previousBtn", function (e) {
     e.preventDefault();
