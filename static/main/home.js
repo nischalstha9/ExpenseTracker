@@ -29,6 +29,7 @@ $(function () {
   }
   const csrftoken = getCookie("csrftoken");
 
+  var count = 0;
   //TABLE DATA RETRIEVER
   function getTableData(page = 1, trans_type = "", date = ", ", search = "") {
     if (date != ", ") {
@@ -39,10 +40,11 @@ $(function () {
     $.ajax({
       url: url,
       success: function (result) {
-        console.log(result);
         var tdata = "";
         trans = result.results;
-        pages = Math.ceil(result.count / 10);
+        count = result.count;
+        pages = Math.ceil(count / 10);
+        console.log(pages);
         if (pages >= 1) {
           paginationHtml(pages);
         }
@@ -213,6 +215,9 @@ $(function () {
       success: function () {
         console.log("DELETED");
         $("#editTransactionModal").modal("toggle");
+        if (count % 10 == 1) {
+          page = page - 1;
+        }
         getTableData(page, trans_type, date, search);
         getBalance();
       },
@@ -240,7 +245,9 @@ $(function () {
     </ul>
     </nav>
     `;
-    $(".pagination-span").html(temp);
+    pages > 1
+      ? $(".pagination-span").html(temp)
+      : $(".pagination-span").html("");
   }
   $(".pagination-span").on("click", "#previousBtn", function (e) {
     e.preventDefault();
