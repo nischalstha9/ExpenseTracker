@@ -47,9 +47,15 @@ $(function () {
         if (pages >= 1) {
           paginationHtml(pages);
         }
-        $.each(trans, function (index, tran) {
-          var style = tran._type == "DEBIT" ? "table-success" : "table-danger";
-          tdata += `<tr class="${style}" id='${tran.id}'>
+        if (count === 0) {
+          $("#tbody").html(
+            "<tr><td class='bg-info text-white col-12'><h6>No Transactions!</h6></td></tr>"
+          );
+        } else {
+          $.each(trans, function (index, tran) {
+            var style =
+              tran._type == "DEBIT" ? "table-success" : "table-danger";
+            tdata += `<tr class="${style}" id='${tran.id}'>
                   <th scope="row">${tran.date}</th>
                   <td>${tran.description}</td>
                   <td>${tran.amount}</td>
@@ -60,8 +66,9 @@ $(function () {
                       </div>
                   </td>
               </tr>`;
-        });
-        $("#tbody").html(tdata);
+          });
+          $("#tbody").html(tdata);
+        }
       },
       error: function (err) {
         console.log(err);

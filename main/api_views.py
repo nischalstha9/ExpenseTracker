@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework import serializers
 from .models import Transaction, Balance
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, CreateAPIView, RetrieveAPIView
@@ -7,7 +8,10 @@ from rest_framework import permissions
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from django_filters import rest_framework as filters
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.response import Response
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -34,9 +38,15 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
 
 
 def BalanceAPIView(request):
-    user = request.user
-    balance = int(Balance.objects.get(user=user).balance)
-    return JsonResponse({"balance": balance})
+    data = {}
+    if request.user.is_authenticated:
+        user = request.user
+        balance = int(Balance.objects.get(user=user).balance)
+        data['balance'] = balance
+        return JsonResponse(data)
+    else:
+        status_code = status.HTTP_401_UNAUTHORIZED
+        return JsonResponse({'message': 'not-authenticated'}, status=402)
 
 
 class TransactionListAPIView(ListCreateAPIView):
@@ -44,6 +54,7 @@ class TransactionListAPIView(ListCreateAPIView):
     serializer_class = TransactionSerializer
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ['description']
+    permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     filterset_fields = {
         'date': ['gte', 'lte', 'date__range'], '_type': {'exact'}, }
@@ -85,6 +96,7 @@ class TransactionOpenAPIView(RetrieveUpdateDestroyAPIView):
 class TransactionCreateView(CreateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionCreateSerializer
+    permission_classes = [IsAuthenticated]
 
     def create(self, *args, **kwargs):
         amount = self.request.POST.get('amount')
