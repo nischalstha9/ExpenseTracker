@@ -12,6 +12,14 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from django_filters import rest_framework as filters
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
+from rest_framework.permissions import BasePermission
+
+
+class IsOwner(BasePermission):
+    message = "Owner Permission Required"
+
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -46,7 +54,7 @@ def BalanceAPIView(request):
         return JsonResponse(data)
     else:
         status_code = status.HTTP_401_UNAUTHORIZED
-        return JsonResponse({'message': 'not-authenticated'}, status=402)
+        return JsonResponse({'message': 'not-authenticated'}, status=status_code)
 
 
 class TransactionListAPIView(ListCreateAPIView):
@@ -59,10 +67,15 @@ class TransactionListAPIView(ListCreateAPIView):
     filterset_fields = {
         'date': ['gte', 'lte', 'date__range'], '_type': {'exact'}, }
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user=self.request.user)
+
 
 class TransactionOpenAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionCreateSerializer
+    permission_classes = [IsOwner]
 
     def perform_update(self, serializer, *args, **kwargs):
         user = self.request.user
