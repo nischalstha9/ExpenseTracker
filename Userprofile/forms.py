@@ -4,16 +4,25 @@ from .models import Profile
 from django.contrib.auth.models import User
 from allauth.account.forms import SignupForm
 
+
 class ProfileUpdateForm(ModelForm):
-    
+
     class Meta:
         model = Profile
         fields = [
-            'contact','dp'
+            'contact'
         ]
-        labels  = {
-        'dp':'Profile Picture',
-        }
+# class ProfileUpdateForm(ModelForm):
+
+#     class Meta:
+#         model = Profile
+#         fields = [
+#             'contact','dp'
+#         ]
+#         labels  = {
+#         'dp':'Profile Picture',
+#         }
+
 
 class UserDetailUpdateForm(ModelForm):
     class Meta:
@@ -22,11 +31,12 @@ class UserDetailUpdateForm(ModelForm):
             'first_name', 'last_name'
         ]
 
-    
+
 class SignupForm(SignupForm):
-    first_name = forms.CharField(max_length=30, label='First Name', required=False)
-    last_name = forms.CharField(max_length=30, label='Last Name', required=False)
-        
+    first_name = forms.CharField(
+        max_length=30, label='First Name', required=False)
+    last_name = forms.CharField(
+        max_length=30, label='Last Name', required=False)
 
     def save(self, request):
 
