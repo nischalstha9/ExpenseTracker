@@ -1,6 +1,6 @@
 # BoilerPlate
 Django-Boilerplate with authentication
-
+Awesome
 
 Run ```git clone https://github.com/nischalstha9/BoilerPlate``` <br />
 Run ```pipenv shell``` or any of your virtualenv command to create/activate Virtualenv <br />
