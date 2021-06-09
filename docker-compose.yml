@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build:
+        context: .
+    container_name: expense_tracker_container
+    command: sh /opt/app/backend/run.sh
+    depends_on: [db]
+    ports:
+      [8002:8002]
+    volumes:
+      - ./DockerData/static:/opt/app/backend/static #for static files
+      - ./DockerData/media:/opt/app/backend/media #for media files
