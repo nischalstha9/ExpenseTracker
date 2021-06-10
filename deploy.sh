@@ -1,9 +1,10 @@
 #!/bin/bash
 pkill -f uwsgi -9
-rm -rf expensetracker
 mkdir expensetracker
 cd ./expensetracker
 git clone https://github.com/nischalstha9/ExpenseTracker .
+git pull
+git pull origin master
 pipenv shell
 pip install -r requirements.txt
 python manage.py makemigrations
