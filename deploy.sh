@@ -4,7 +4,6 @@ mkdir expensetracker
 cd ./expensetracker
 git clone https://github.com/nischalstha9/ExpenseTracker .
 git pull origin master
-cp ./media home/ubuntu/ExpenseTracker/DockerData/media -r
 # pipenv shell
 # pip install -r requirements.txt
 # python manage.py makemigrations
