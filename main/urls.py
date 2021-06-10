@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views import home
 from .api_views import TransactionListAPIView, TransactionOpenAPIView, TransactionCreateView, BalanceAPIView
 
