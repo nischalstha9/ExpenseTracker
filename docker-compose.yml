@@ -10,5 +10,5 @@ services:
     ports:
       [8010:8002]
     volumes:
-      - ./DockerData/static:/opt/app/backend/static #for static files
-      - ./DockerData/media:/opt/app/backend/media #for media files
+      - ./DockerData/static:/opt/app/backend/static/ #for static files
+      - ./DockerData/media:/opt/app/backend/media/ #for media files
