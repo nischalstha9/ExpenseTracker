@@ -7,8 +7,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
-RUN apk update \
-    && apk add python3-dev py-pip 
+RUN apk update 
+RUN apk add postgresql-dev python3-dev musl-dev build-base py-pip jpeg-dev zlib-dev libffi-dev
+RUN apk add --update --no-cache g++ libxslt-dev
 
 RUN pip install --upgrade pip
 # copy source and install dependencies
