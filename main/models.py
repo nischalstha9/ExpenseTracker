@@ -1,23 +1,36 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import deactivate, ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+import random
 
 
-class Balance(models.Model):
-    balance = models.IntegerField(_("Balance"), default=0)
-    user = models.OneToOneField(User, verbose_name=_(
-        "Owner"), on_delete=models.CASCADE)
+class AccountBook(models.Model):
+    title = models.CharField(_("Title"), max_length=200)
+    user = models.ForeignKey(User, verbose_name=_("Owner"), on_delete=models.CASCADE, editable=False)
+    created_at = models.DateTimeField(_("Created At"), auto_now=False, auto_now_add=True)
+    slug = models.SlugField(_("Slug"), editable=False)
 
-    class Meta:
-        verbose_name = _("Balance")
-        verbose_name_plural = _("Balances")
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            val = self.title
+            while(True):
+                test = slugify(val)
+                count = self.__class__.objects.filter(slug=test).count()
+                if(count == 0):
+                    break
+                val = self.title + " " +str(self.id)
+            self.slug = test
+        return super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.user.username
-
-    def get_absolute_url(self):
-        return reverse("Balance_detail", kwargs={"pk": self.pk})
-
+    @property
+    def balance(self):
+        trans = Transaction.objects.filter(account_book = self.pk)
+        debit = trans.filter(_type = "DEBIT").aggregate(sum=models.Sum('amount')).get('sum')
+        credit = trans.filter(_type = "CREDIT").aggregate(sum=models.Sum('amount')).get('sum')
+        debit = 0 if debit is None else int(debit)
+        credit = 0 if credit is None else int(credit)
+        return debit-credit
 
 class Transaction(models.Model):
     class Types(models.TextChoices):
@@ -28,10 +41,12 @@ class Transaction(models.Model):
     base_type = Types.DEBIT
     amount = models.PositiveIntegerField(_("Amount"))
     description = models.TextField(_("Description"))
+    account_book = models.ForeignKey(AccountBook, verbose_name=_(
+        "Account Book"), on_delete=models.CASCADE, null=True, editable=False)
     user = models.ForeignKey(User, verbose_name=_(
-        "Owner"), on_delete=models.CASCADE)
+        "Owner"), on_delete=models.CASCADE, null=True)
     _type = models.CharField(
-        _("Type"), max_length=50, choices=Types.choices, default=base_type
+        _("Type"), max_length=50, choices=Types.choices, default=base_type, editable=False
     )
 
     class Meta:
@@ -40,7 +55,7 @@ class Transaction(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return f"{self.user.username} => {self.amount}"
+        return f"{self.account_book.user.username} => {self.amount}"
 
     def get_absolute_url(self):
         return reverse("Transaction_detail", kwargs={"pk": self.pk})

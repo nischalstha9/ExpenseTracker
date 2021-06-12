@@ -1,8 +1,7 @@
-const baseUrl = "http://localhost:8000/api/v1/";
 $(function () {
-  function getAccounts() {
+  function getBalance() {
     $.ajax({
-      url: baseUrl + "",
+      url: "/mybalance/",
       success: function (result) {
         $("#balance_amt").html(result.balance);
       },

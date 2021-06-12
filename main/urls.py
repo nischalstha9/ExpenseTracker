@@ -1,13 +1,11 @@
 from django.urls import path
-from .views import home
-from .api_views import TransactionListAPIView, TransactionOpenAPIView, TransactionCreateView, BalanceAPIView
+from .api_views import AccountBookListCreateAPIView, AccountBookRetrieveUpdateDestroyAPIView, TransactionListCreateAPIView,TransactionDetailAPIView
 
 app_name = 'main'
 urlpatterns = [
-    path("", home, name="home"),
     # rest_urls
-    path("my-tasks/", TransactionListAPIView.as_view(), name="my-trans-list"),
-    path("mybalance/", BalanceAPIView, name="my-balance"),
-    path("tasks/<int:pk>/", TransactionOpenAPIView.as_view(), name="trans-open"),
-    path("tasks/new/", TransactionCreateView.as_view(), name="trans-create"),
+    path("account-books/", AccountBookListCreateAPIView.as_view(), name="account-book-list-create"),
+    path("account-books/<int:account_book_pk>/", AccountBookRetrieveUpdateDestroyAPIView.as_view(), name="account-book-RUD"),
+    path("account-books/<int:account_book_pk>/transactions/", TransactionListCreateAPIView.as_view(), name="trans-list-create"),
+    path("account-books/<int:account_book_pk>/transactions/<int:trans_pk>/", TransactionDetailAPIView.as_view(), name="trans-RUD"),
 ]

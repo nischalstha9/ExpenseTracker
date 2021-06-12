@@ -5,69 +5,10 @@
 {% include 'modals.html' %}
 
 
-<h1>Your Balance: Rs. <span id='balance_amt' class = 'text-success'>0</span>/-</h1>
+<h1>Your Accounts:</h1>
 <hr>
 
-<form action="" method="get" id='filter-form'>
-    <div class="form-row">
-    <div class="form-group col-md-3">
-      <label for="inputState"><h6>Type:</h6></label>
-      <select class="custom-select" id='Transasction_Filter'>
-        <option value="">All Transactions</option>
-        <option value="DEBIT">Income</option>
-        <option value="CREDIT">Expenses</option>
-      </select>
-    </div>
 
-    <div class="form-group col-md-3">
-    <label for="sdate-filter"><h6>Start Date:</h6></label>
-      <input type="date" autocomplete="false" class='form-control' id='sdate-filter'>
-    </div>
-
-    <div class="form-group col-md-3">
-    <label for="edate-filter"><h6>End Date:</h6></label>
-      <input type="date" autocomplete="false" class='form-control' id='edate-filter'>
-    </div>
-
-    <div class="form-group col-md-3">
-    <label for="clear-filter"><h6></h6></label>
-      <input type="button" autocomplete="false" class='btn btn-secondary' id='clear-filter' value='Clear Filters'>
-    </div>
-
-    <div class="form-group col-md-4">
-      <input type="text" autocomplete="false" class='form-control' id='search-filter' placeholder='Search By Description'>
-    </div>
-
-</form>
-
-<div class="">
-<button type="button" class="btn btn-success" id='add-trans-btn'>
-  Add Income
-</button>
-<button type="button" class="btn btn-danger" id='add-exp-trans-btn'>
-  Add Expense
-</button>
-</div>
-
-<hr>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col" class='bg-white sticky-top'>Date</th>
-      <th scope="col" class='bg-white col-6 sticky-top'>Description</th>
-      <th scope="col" class='bg-white sticky-top'>Amount</th>
-      <th scope="col" class='bg-white sticky-top'>Action</th>
-    </tr>
-  </thead>
-  <tbody id='tbody'>
-  </tbody>
-</table>
-  <div class="">
-    <span class="pagination-span"></span>
-  </div>
-  <div class="ml-auto mr-3">
-    <span class="pagination-count-span small"></span>
-  </div>
 {% endblock content %}
 {% block javascript %}
   <script src="{% static 'main/home.js' %}"></script>

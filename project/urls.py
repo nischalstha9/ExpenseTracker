@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static, serve
 from django.conf.urls import url
+from main.views import home
 
 from django.conf.urls import handler404
 handler404 = 'main.views.view_404'
@@ -26,7 +27,8 @@ handler404 = 'main.views.view_404'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', include('main.urls')),
+    path('', home, name='homepage'),
+    path('api/v1/', include('main.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('profile/', include('Userprofile.urls')),
     # url(r'^media/(?P<path>.*)$', serve,
@@ -36,8 +38,8 @@ urlpatterns = [
 
 ]
 
-# if settings.DEBUG:
-#     urlpatterns += static(settings.STATIC_URL,
-#                           document_root=settings.STATIC_ROOT)
-#     urlpatterns += static(settings.MEDIA_URL,
-#                           document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

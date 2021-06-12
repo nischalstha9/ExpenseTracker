@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
-from main.models import Balance
 # Create your models here.
 from django.db.models.signals import post_save
 
@@ -30,8 +29,6 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         # creates user profile on new account
         Profile.objects.create(user=instance)
-        # creates user balance on new account
-        Balance.objects.create(user=instance)
 
 
 def save_profile(sender, instance, **kwargs):
