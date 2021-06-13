@@ -2,16 +2,26 @@ const baseUrl = "http://localhost:8000/api/v1/";
 $(function () {
   function getAccounts() {
     $.ajax({
-      url: baseUrl + "",
+      url: baseUrl + "account-books/",
       success: function (result) {
-        $("#balance_amt").html(result.balance);
+        console.log(result);
+        let table_data;
+        $.each(result, function (index, book) {
+          table_data += `
+          <div id='${book.id}'>
+            < scope="row">${book.title}</th>
+            <td>${book.balance}</td>
+          </tr>
+          `;
+        });
+        $("#account-books-container").html(table_data);
       },
       error: function (err) {
         console.log(err);
       },
     });
   }
-  getBalance();
+  getAccounts();
   //CSRF FUNCTION
   function getCookie(name) {
     let cookieValue = null;

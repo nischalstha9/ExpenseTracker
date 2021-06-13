@@ -30,7 +30,8 @@ class AccountBookSerializer(serializers.ModelSerializer):
             'title',
             'user',
             'created_at',
-            'balance'
+            'balance',
+            'slug'
         ]
     
     def get_balance(self, obj):
