@@ -42,11 +42,11 @@ class Transaction(models.Model):
     amount = models.PositiveIntegerField(_("Amount"))
     description = models.TextField(_("Description"))
     account_book = models.ForeignKey(AccountBook, verbose_name=_(
-        "Account Book"), on_delete=models.CASCADE, null=True, editable=False)
+        "Account Book"), on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, verbose_name=_(
         "Owner"), on_delete=models.CASCADE, null=True)
     _type = models.CharField(
-        _("Type"), max_length=50, choices=Types.choices, default=base_type, editable=False
+        _("Type"), max_length=50, choices=Types.choices, null=False
     )
 
     class Meta:
@@ -55,33 +55,7 @@ class Transaction(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return f"{self.account_book.user.username} => {self.amount}"
+        return f" {self.amount}"
 
     def get_absolute_url(self):
         return reverse("Transaction_detail", kwargs={"pk": self.pk})
-
-
-class DebitManager(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(_type=Transaction.Types.DEBIT)
-
-
-class Debit(Transaction):
-    base_type = Transaction.Types.DEBIT
-    objects = DebitManager()
-
-    class Meta:
-        proxy = True
-
-
-class CreditManager(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(_type=Transaction.Types.CREDIT)
-
-
-class Credit(Transaction):
-    base_type = Transaction.Types.CREDIT
-    objects = CreditManager()
-
-    class Meta:
-        proxy = True

@@ -38,11 +38,6 @@ class AccountBookListCreateAPIView(ListCreateAPIView):
     
     def get_queryset(self):
         return AccountBook.objects.filter(user=self.request.user)
-
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        data['user'] = request.user.pk
-        return super().post(request, *args, **kwargs)
     
 
 class AccountBookRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -74,10 +69,11 @@ class TransactionListCreateAPIView(ListCreateAPIView):
         return qs
 
 
-    def post(self,request, *args, **kwargs):
-        data = request.data
-        data['account_book']=self.kwargs.get('account_book_pk')
-        return super().post(request, *args, **kwargs)
+    # def post(self,request, *args, **kwargs):
+    #     data = request.data
+    #     print("DATA",data)
+    #     # data['account_book']=self.kwargs.get('account_book_pk')
+    #     return super().post(request, *args, **kwargs)
 
 
 class TransactionDetailAPIView(RetrieveUpdateDestroyAPIView):
@@ -90,7 +86,7 @@ class TransactionDetailAPIView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'trans_pk'
     lookup_field='pk'
 
-    def put(self, *args, **kwargs):
-        data = self.request.data
-        data['account_book']=self.kwargs.get('account_book_pk')
-        return super().put(*args, **kwargs)
+    # def put(self, *args, **kwargs):
+    #     data = self.request.data
+    #     data['account_book']=self.kwargs.get('account_book_pk')
+    #     return super().put(*args, **kwargs)
