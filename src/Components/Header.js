@@ -4,12 +4,10 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -25,7 +23,8 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
+import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -97,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
 export default function PrimarySearchAppBar() {
   const account_books = useSelector((state) => state.account_books);
   const username = useSelector((state) => state.user);
+  const authenticated = useSelector((state) => state.authenticated);
   const [state, setState] = React.useState({
     left: false,
   });
@@ -123,7 +123,8 @@ export default function PrimarySearchAppBar() {
       <List>
         <ListItem button>
           <ListItemIcon>
-            <h4>@ {username}</h4>
+            <AccountCircleTwoToneIcon fontSize="large" />
+            <h4> @{username}</h4>
           </ListItemIcon>
         </ListItem>
       </List>
@@ -144,12 +145,19 @@ export default function PrimarySearchAppBar() {
               to={`/accounts/${book.id}`}
             >
               <ListItemIcon>
-                <MailIcon />
+                <LibraryBooksIcon />
               </ListItemIcon>
               <ListItemText primary={book.title} />
             </ListItem>
           );
         })}
+        <Divider />
+        <ListItem button component={Link} to={"/manage/accounts"}>
+          <ListItemIcon>
+            <h6>Manage My Books</h6>
+          </ListItemIcon>
+        </ListItem>
+        <Divider />
       </List>
     </div>
   );
@@ -191,7 +199,9 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/logout">
+        Logout
+      </MenuItem>
     </Menu>
   );
 
@@ -241,9 +251,13 @@ export default function PrimarySearchAppBar() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon />
-          </Button>
+          {authenticated ? (
+            <Button onClick={toggleDrawer(anchor, true)}>
+              <MenuIcon />
+            </Button>
+          ) : (
+            ""
+          )}
           <Drawer
             anchor={anchor}
             open={state[anchor]}
@@ -260,19 +274,6 @@ export default function PrimarySearchAppBar() {
           >
             Expense Tracker
           </Typography>
-          {/* <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">

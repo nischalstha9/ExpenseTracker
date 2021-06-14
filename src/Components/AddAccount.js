@@ -15,8 +15,6 @@ const AddAccount = () => {
         withCredentials: true,
       })
         .then((resp) => {
-          console.clear();
-          console.log(resp);
           history.push("/accounts");
         })
         .catch((err) => {

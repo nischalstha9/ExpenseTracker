@@ -21,12 +21,23 @@ const AccountBooks = () => {
       <div className="books">
         {books.map((book) => {
           return (
-            <BookComponent
-              key={book.id}
-              id={book.id}
-              title={book.title}
-              balance={book.balance}
-            />
+            <div className="management-container">
+              <BookComponent
+                key={book.id}
+                id={book.id}
+                title={book.title}
+                balance={book.balance}
+              />
+              <div className="btn-group">
+                <button
+                  account_book={book}
+                  className="btn btn-outline-info"
+                  onClick={() => history.push(`/manage/accounts/${book.id}`)}
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
           );
         })}
       </div>

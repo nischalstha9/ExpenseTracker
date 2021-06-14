@@ -24,6 +24,12 @@ const Book = () => {
   const RefreshForm = () => {
     setRefresher(refresher + 1);
   };
+  useEffect(() => {
+    setPage(1);
+    setTransactionType("");
+    setSDate("");
+    setEDate("");
+  }, [account_id]);
 
   useEffect(() => {
     axiosInstance
@@ -45,10 +51,11 @@ const Book = () => {
   }, [url, refresher, account_id]);
   return (
     <div className="container mt-4">
-      <h4>{bookDetail.title}</h4>
+      <h4>Title: {bookDetail.title}</h4>
       <h4>
-        Your Balance: Rs.
+        Balance: Rs.
         <span id="balance_amt" className="text-success">
+          {" "}
           {bookDetail.balance}
         </span>
         /-

@@ -6,19 +6,27 @@
 }
 
 .book-div {
-  min-width: 20vw;
+  min-width: 100%;
   background-color: #c0678d;
-  padding: 1vh;
+  padding: 1vh 1vh 1vh 1vh;
+  margin: 1vh 0vh 1vh 0vh;
   display: flex;
-  flex-direction: row;
-  align-content: space-between;
-  margin: 1vh 20vw 1vh 20vw;
   border-radius: 5px;
   color: white;
   text-decoration: none;
 }
+.management-container {
+  margin: 1vh 0vh 1vh 0vh;
+  max-width: 60%;
+  display: flex;
+  flex-direction: row;
+}
+.btn-group {
+  max-height: 5vh;
+  margin-top: 1.5vh;
+  margin-left: 3vw;
+}
 .title {
-  /* background-color: blue; */
   padding: 0.2rem;
   width: 75%;
   cursor: pointer;
@@ -43,4 +51,8 @@
 a:hover {
   text-decoration: none;
   color: #c0c0c0;
+}
+
+.motherboard {
+  min-height: 100vh;
 }
