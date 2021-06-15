@@ -4,9 +4,12 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
-@login_required
+# @login_required
+# def home(request):
+#     return render(request, 'home.html')
+
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'index.html')
 
 
 def view_404(request, *args, **kwargs):

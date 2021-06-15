@@ -75,3 +75,20 @@ allauth_urls = [
 
 
 urlpatterns += allauth_urls
+react_views = [
+    # List all your react routes here
+"",
+"logout/",
+"register/",
+"login/",
+"accounts/",
+"manage/accounts/",
+"manage/accounts/<int:id>/",
+"create-account-book/",
+"accounts/<int:id>/",
+"profile/",
+"change-password/",
+
+]
+
+urlpatterns += [path(i, home, name='homepage') for i in react_views]
