@@ -1,31 +1,63 @@
-{% extends "account/base.html" %}
-
+{% load static %}
 {% load i18n %}
 {% load account %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <link rel="icon" type="image/x-icon" href="{% static '../media/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static '../media/favicon.ico' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Expense Tracker is simple app to track your daily income and expenses.">
+    <meta name="author" content="Nischal Shrestha">
+      <meta property="og:title" content="Confirm E-mail Address | Expense Tracker">
+    <meta property="og:description" content="Expense Tracker is simple app to track your daily income and expenses.">
+    <meta property="og:url" content="https://aakogako.herokuapp.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Expense Tracker | AakoGako">
+    <!-- CUSTOM CSS -->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <title>Confirm E-mail Address | Expense Tracker</title>
+  </head>
+  <body>
+          <div class='container' id='page-top'>
+          
+            <div>
+            {% block header %}
+                <br>
+                <br>
+                <br>
+            {% endblock header %}
+            {% block content %}
+            <h1>{% trans "Confirm E-mail Address" %}</h1><hr>
 
-{% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
+            {% if confirmation %}
+
+            {% user_display confirmation.email_address.user as user_display %}
+
+            <p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
+
+            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+            {% csrf_token %}
+                <button class="btn btn-primary"type="submit">{% trans 'Confirm' %}</button>
+            </form><hr>
+
+            {% else %}
+
+            {% url 'account_email' as email_url %}
+
+            <p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
+
+            {% endif %}
+
+            {% endblock %}
+            
+            </div>
 
 
-{% block content %}
-<h1>{% trans "Confirm E-mail Address" %}</h1><hr>
-
-{% if confirmation %}
-
-{% user_display confirmation.email_address.user as user_display %}
-
-<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
-
-<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
-{% csrf_token %}
-    <button class="btn btn-primary"type="submit">{% trans 'Confirm' %}</button>
-</form><hr>
-
-{% else %}
-
-{% url 'account_email' as email_url %}
-
-<p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
-
-{% endif %}
-
-{% endblock %}
+  </body>
+</html>

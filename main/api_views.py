@@ -1,3 +1,4 @@
+from rest_framework.response import Response
 from .models import AccountBook, Transaction
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.filters import SearchFilter
@@ -8,6 +9,7 @@ from rest_framework.permissions import BasePermission
 
 from .serializers import AccountBookSerializer, TransactionSerializer
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.hashers import check_password
 
 
 class IsAccountBookOwner(BasePermission):
@@ -47,6 +49,14 @@ class AccountBookRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     model = AccountBook
     serializer_class = AccountBookSerializer
     queryset = AccountBook.objects.all()
+
+    def delete(self, request, *args, **kwargs):
+        print(request.data)
+        password = request.data.get("password")
+        print(password)
+        if (check_password(password, self.request.user.password)):
+            return self.destroy(request, *args, **kwargs)
+        return Response({"detail":"Password Verification Failed"}, 400)
 
 
 

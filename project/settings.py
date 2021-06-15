@@ -29,7 +29,7 @@ SECRET_KEY = 'h&%6kc9vqk22)q+lqzq_14ebsp-d8cpmf3dk(swt_h&+w3_1w^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'aakogako.herokuapp.com', 'expense.shrestha-nischal.com.np', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'aakogako.herokuapp.com', 'expense.shrestha-nischal.com.np', 'localhost', "192.168.1.2"]
 
 
 # Application definition
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'dj_rest_auth',
+    'dj_rest_auth.registration',
 
 ]
 
@@ -198,7 +199,7 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # allauth
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL")
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
@@ -207,6 +208,8 @@ ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 # overriding default allauth signup form
 ACCOUNT_FORMS = {'signup': 'Userprofile.forms.SignupForm'}
+OLD_PASSWORD_FIELD_ENABLED=True
+LOGOUT_ON_PASSWORD_CHANGE=True
 
 
 # for sending email
@@ -214,10 +217,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 
 # django_heroku.settings(locals())
