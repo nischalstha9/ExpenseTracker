@@ -2,6 +2,7 @@ import React from "react";
 // import Register from "./Components/auth/register";
 import Login from "./Components/auth/Login";
 import Logout from "./Components/auth/Logout";
+import Register from "./Components/auth/Register";
 import ProtectedRoute from "./Components/Routes/privateRoute";
 import {
   Route,
@@ -18,11 +19,14 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import Book from "./Components/Book";
 import ConfirmDeleteModal from "./Components/AccountBookEditDelete.js.js";
+import MyAccount from "./Components/auth/MyAccount";
+import ChangePassword from "./Components/auth/ChangePassword";
+// import "bootstrap/dist/js/bootstrap.bundle";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 const token = localStorage.getItem("access_token");
-const user = localStorage.getItem("username");
+const user = JSON.parse(localStorage.getItem("user"));
 
 function App() {
   const dispatch = useDispatch();
@@ -39,7 +43,8 @@ function App() {
 
         <Switch>
           <div className="motherboard">
-            <Route path="/logout" component={Logout} />
+            <ProtectedRoute path="/logout" component={Logout} />
+            <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
             {/* <Route path="/forget-password" component={ForgetPassword} /> */}
             {/* <Route path="/register" component={Register} /> */}
@@ -67,6 +72,11 @@ function App() {
               component={AddAccount}
             />
             <ProtectedRoute path="/accounts/:account_id" component={Book} />
+            <ProtectedRoute path="/profile" component={MyAccount} />
+            <ProtectedRoute
+              path="/change-password"
+              component={ChangePassword}
+            />
           </div>
         </Switch>
       </Router>

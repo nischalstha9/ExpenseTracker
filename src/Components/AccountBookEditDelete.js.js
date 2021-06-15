@@ -6,12 +6,13 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import AxiosInstance from "../AxiosInstance";
 import { useFormik } from "formik";
-import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
+import Alert from "./Alert";
 
 export default function DeleteAccountBookModal() {
   const history = useHistory();
   const [accountBook, setAccountBook] = useState({});
+  const [alerts, setAlerts] = useState([]);
   let { account_id } = useParams();
   useEffect(() => {
     AxiosInstance.patch(`account-books/${account_id}/`, {
@@ -37,7 +38,7 @@ export default function DeleteAccountBookModal() {
         .catch((err) => console.log(err));
     },
   });
-  const formik = useFormik({
+  const deleteForm = useFormik({
     initialValues: { password: "" },
     onSubmit: (values) => {
       console.log(values);
@@ -51,14 +52,24 @@ export default function DeleteAccountBookModal() {
         .then((resp) => {
           history.push("/manage/accounts");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          let msg = Object.entries(err.response.data)[0][1];
+          console.log(msg);
+          setAlerts([
+            {
+              message: msg,
+              type: "danger",
+            },
+          ]);
+        });
     },
   });
 
   return (
     <div className="container mt-3">
       <div className="jumbotron">
-        <h3>Update {accountBook.title}</h3>
+        <h3>Update Book "{accountBook.title}"</h3>
+
         <hr />
         <DialogTitle id="form-dialog-title">Title:</DialogTitle>
         <DialogContent>
@@ -82,12 +93,12 @@ export default function DeleteAccountBookModal() {
         </DialogContent>
       </div>
       <div className="">
-        <h3>Delete {accountBook.title}</h3>
+        <h3>Delete Book "{accountBook.title}"</h3>
         <hr />
         <DialogTitle id="form-dialog-title">
           Confirm Delete Account Book: "{accountBook.title}"
         </DialogTitle>
-        <form action="" onSubmit={formik.handleSubmit}>
+        <form action="" onSubmit={deleteForm.handleSubmit}>
           <DialogContent>
             <DialogContentText>
               Deleting Account Book will delete all of your transactions in
@@ -100,20 +111,23 @@ export default function DeleteAccountBookModal() {
               label="Password"
               type="password"
               fullWidth
-              onChange={formik.handleChange}
-              value={formik.values.password}
+              onChange={deleteForm.handleChange}
+              value={deleteForm.values.password}
               placeholder="Your Password"
             />
           </DialogContent>
           <DialogActions>
             <button
-              onClick={formik.handleSubmit}
+              onClick={deleteForm.handleSubmit}
               className="btn btn-outline-danger"
             >
               Confirm Delete
             </button>
           </DialogActions>
         </form>
+        {alerts.map((alert) => {
+          return <Alert message={alert.message} type={alert.type} />;
+        })}
       </div>
     </div>
   );

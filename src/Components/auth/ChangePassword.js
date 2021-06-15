@@ -9,9 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import AxiosInstance from "../../AxiosInstance";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { log_in, insert_user } from "../../action";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { green } from "@material-ui/core/colors";
 import Alert from "../Alert";
@@ -48,38 +46,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function ChangePassword() {
   const [alerts, setAlerts] = useState([]);
-  const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
   const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const formik = useFormik({
-    initialValues: { username: "", password: "" },
+  const passwordChangeForm = useFormik({
+    initialValues: { old_password: "", new_password1: "", new_password2: "" },
     onSubmit: (values) => {
       setProcessing(true);
       console.log(values);
-      AxiosInstance.post(`auth/login/`, values, {
+      AxiosInstance.post(`auth/password/change/`, values, {
         withCredentials: true,
       })
         .then((resp) => {
           setProcessing(false);
           console.clear();
-          localStorage.setItem("access_token", resp.data.access_token);
-          localStorage.setItem("user", JSON.stringify(resp.data.user));
-          dispatch(log_in());
-          dispatch(insert_user(resp.data.user));
-          history.push("/accounts");
-          setSuccess(true);
-          // alert.success("You are logged in!");
+          history.push("/logout");
         })
         .catch((err) => {
           setProcessing(false);
-          setSuccess(false);
+          console.log(err.response.data);
+          let msg = Object.entries(err.response.data)[0][1][0];
+          console.log(msg);
           setAlerts([
             {
-              message: err.response.data.non_field_errors[0],
+              message: msg,
               type: "danger",
             },
           ]);
@@ -92,19 +84,23 @@ export default function SignIn() {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign in
+          Change Password
         </Typography>
-        <form className={classes.form} onSubmit={formik.handleSubmit}>
+        <form
+          className={classes.form}
+          onSubmit={passwordChangeForm.handleSubmit}
+        >
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            onChange={formik.handleChange}
-            value={formik.values.username}
+            id="old_password"
+            label="Old Password"
+            name="old_password"
+            type="password"
+            onChange={passwordChangeForm.handleChange}
+            value={passwordChangeForm.values.old_password}
             autoFocus
           />
           <TextField
@@ -112,13 +108,24 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
-            name="password"
-            label="Password"
             type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
+            label="New Password"
+            id="new_password1"
+            onChange={passwordChangeForm.handleChange}
+            value={passwordChangeForm.values.new_password1}
+            name="new_password1"
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            type="password"
+            label="Confirm New Password"
+            id="new_password2"
+            onChange={passwordChangeForm.handleChange}
+            value={passwordChangeForm.values.new_password2}
+            name="new_password2"
           />
           <div className={classes.buttonWrapper}>
             <Button
@@ -129,7 +136,7 @@ export default function SignIn() {
               disabled={processing}
               className={classes.submit}
             >
-              Sign In
+              Change Password
             </Button>
             {processing && (
               <CircularProgress size={24} className={classes.buttonProgress} />
@@ -139,11 +146,6 @@ export default function SignIn() {
             <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link to="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>

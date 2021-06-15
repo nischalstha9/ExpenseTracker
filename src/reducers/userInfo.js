@@ -1,9 +1,9 @@
-const userInfoReducer = (state = null, action) => {
+const userInfoReducer = (state = {}, action) => {
   switch (action.type) {
     case "INSERT_USER":
       return action.payload;
     case "REMOVE_USER":
-      return "";
+      return {};
     default:
       return state;
   }

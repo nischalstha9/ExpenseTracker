@@ -24,7 +24,9 @@ const AddAccount = () => {
   });
 
   return (
-    <div>
+    <div className="container mt-3">
+      <h1>Create Account book</h1>
+      <hr />
       <form
         action=""
         method="post"
