@@ -229,19 +229,19 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 # SECURE_HSTS_SECONDS=60
 # SECURE_HSTS_INCLUDE_SUBDOMAINS=True
 # SECURE_HSTS_PRELOAD=True
-SECURE_SSL_REDIRECT=True
 # SESSION_COOKIE_SECURE=True
 # CSRF_COOKIE_SECURE=True
 # SECURE_REFERRER_POLICY='origin-when-cross-origin'
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# CORS_ALLOWED_ORIGINS = [
-#     # "http://localhost:3000",
-#     # "http://127.0.0.1:3000",
-#     # "http://localhost:8000",
-#     "https://aakogako.herokuapp.com"
-# ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    # "http://localhost:3000",
+    # "http://127.0.0.1:3000",
+    # "http://localhost:8000",
+    "https://aakogako.herokuapp.com"
+]
+# SECURE_SSL_REDIRECT=True
+# CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS=True
 django_heroku.settings(locals())
