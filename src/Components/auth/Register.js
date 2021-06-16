@@ -15,10 +15,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-// import { useAlert } from "react-alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { green } from "@material-ui/core/colors";
+import Alert from "../Alert";
 
 export default function Signup() {
-  // const customAlert = useAlert();
   const history = useHistory();
   const initialFormData = Object.freeze({
     //object.freeze prevents from creating new obj elements
@@ -27,6 +28,9 @@ export default function Signup() {
     password1: "",
     password2: "",
   });
+  const [alerts, setAlerts] = useState([]);
+  const [processing, setProcessing] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState(initialFormData);
 
@@ -38,25 +42,40 @@ export default function Signup() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    setProcessing(true);
 
     AxiosInstance.post(`auth/register/`, formData)
       .then((resp) => {
-        // var alerts = resp.data;
-        // var aler = alerts[Object.keys(alerts)[0]];
-        // customAlert.success(aler);
+        setSuccess(true);
         history.push("/login");
-        console.log(resp.data);
       })
       .catch((err) => {
-        // var alerts = err.response.data;
-        // var aler = alerts[Object.keys(alerts)[0]];
-        // customAlert.error(aler);
+        setSuccess(false);
         console.log(err);
-      });
+        let msg = Object.entries(err.response.data)[0][1];
+        setAlerts([
+          {
+            message: msg,
+            type: "warning",
+          },
+        ]);
+      })
+      .finally(() => setProcessing(false));
   };
 
   const useStyles = makeStyles((theme) => ({
+    buttonProgress: {
+      color: green[500],
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      marginTop: -12,
+      marginLeft: -12,
+    },
+    buttonWrapper: {
+      margin: theme.spacing(1),
+      position: "relative",
+    },
     paper: {
       marginTop: theme.spacing(8),
       display: "flex",
@@ -143,16 +162,25 @@ export default function Signup() {
                 />
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={(e) => handleSubmit(e)}
-            >
-              Sign Up
-            </Button>
+            <div className={classes.buttonWrapper}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                disabled={processing}
+                onClick={(e) => handleSubmit(e)}
+              >
+                Sign Up
+              </Button>
+              {processing && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+            </div>
             <Grid container justify="flex-end">
               <Grid item>
                 <Link to="/login" variant="body2">
@@ -164,6 +192,9 @@ export default function Signup() {
         </div>
         <Box mt={5}></Box>
       </div>
+      {alerts.map((alert) => {
+        return <Alert message={alert.message} type={alert.type} />;
+      })}
     </Container>
   );
 }

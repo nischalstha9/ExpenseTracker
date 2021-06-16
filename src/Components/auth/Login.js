@@ -64,7 +64,6 @@ export default function SignIn() {
         withCredentials: true,
       })
         .then((resp) => {
-          setProcessing(false);
           console.clear();
           localStorage.setItem("access_token", resp.data.access_token);
           localStorage.setItem("user", JSON.stringify(resp.data.user));
@@ -75,7 +74,6 @@ export default function SignIn() {
           // alert.success("You are logged in!");
         })
         .catch((err) => {
-          setProcessing(false);
           setSuccess(false);
           setAlerts([
             {
@@ -83,7 +81,8 @@ export default function SignIn() {
               type: "danger",
             },
           ]);
-        });
+        })
+        .finally(() => setProcessing(false));
     },
   });
 

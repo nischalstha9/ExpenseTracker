@@ -2,8 +2,8 @@ import axios from "axios";
 // import { log_out } from "./action";
 // import { useDispatch } from "react-redux";
 
-// const baseURL = "https://garnu6.herokuapp.com/api/";
-const baseURL = "http://localhost:8000/api/v1/";
+// const baseURL = "http://localhost:8000/api/v1/";
+const baseURL = "https://aakogako.herokuapp.com/api/v1/";
 const axiosInstance = axios.create({
   baseURL: baseURL,
   timeout: 5000,
