@@ -62,7 +62,13 @@ const Book = () => {
       </h4>
       <hr />
 
-      <form action="" method="get" id="filter-form" className="form-control">
+      <form
+        action=""
+        method="get"
+        id="filter-form"
+        className="form-control"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <div className="form-row">
           <div className="form-group col-md-4">
             <label htmlFor="inputState">
@@ -121,10 +127,11 @@ const Book = () => {
               className="form-control"
               id="search-filter"
               placeholder="Search By Description"
-              value={query}
-              onChange={(e) => {
-                setPage(1);
-                setQuery(e.target.value);
+              onKeyUp={(e) => {
+                if (e.code === "Enter") {
+                  setPage(1);
+                  setQuery(e.target.value);
+                }
               }}
             />
           </div>

@@ -20,13 +20,13 @@ axiosInstance.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-    // if (typeof error.response == "undefined") {
-    //   alert("Session Expired Please Login Again.");
-    //   localStorage.removeItem("access_token");
-    //   window.location.pathname = "/logout";
-    //   // alert("A server/network error occoured.");
-    //   // return Promise.reject(error);
-    // }
+    if (typeof error.response == "undefined") {
+      // alert("Session Expired Please Login Again.");
+      // localStorage.removeItem("access_token");
+      // window.location.pathname = "/logout";
+      alert("A server/network error occoured.");
+      return Promise.reject(error);
+    }
     if (
       error.response.status === 401 &&
       originalRequest.url === baseURL + "auth/token/refresh/"

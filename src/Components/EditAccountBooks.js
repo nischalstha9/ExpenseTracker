@@ -30,7 +30,7 @@ const AccountBooks = () => {
               />
               <div className="btn-group">
                 <button
-                  account_book={book}
+                  account_book={book.id}
                   className="btn btn-outline-info"
                   onClick={() => history.push(`/manage/accounts/${book.id}`)}
                 >
