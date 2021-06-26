@@ -3,7 +3,7 @@ import axios from "axios";
 // import { useDispatch } from "react-redux";
 
 // const baseURL = "http://localhost:8000/api/v1/";
-const baseURL = "https://aakogako.herokuapp.com/api/v1/";
+const baseURL = "https://api.shrestha-nischal.com/api/v1/";
 const axiosInstance = axios.create({
   baseURL: baseURL,
   timeout: 5000,

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build:
+        context: .
+    container_name: expense_tracker_frontend
+    ports:
+      [9011:5000]
