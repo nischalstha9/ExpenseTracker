@@ -159,7 +159,7 @@ REST_FRAMEWORK = {
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'access_token'
 JWT_AUTH_REFRESH_COOKIE = 'refresh_token'
-if DEBUG:
+if not DEBUG:
     JWT_AUTH_SECURE=True
     JWT_AUTH_SAMESITE='None'
 SIMPLE_JWT = {
