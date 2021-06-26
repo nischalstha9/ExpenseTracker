@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import django_heroku
+# import django_heroku
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -244,4 +244,4 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 # ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS=True
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
