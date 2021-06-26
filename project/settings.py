@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'h&%6kc9vqk22)q+lqzq_14ebsp-d8cpmf3dk(swt_h&+w3_1w^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')=='1'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'aakogako.herokuapp.com', 'expense.shrestha-nischal.com.np', 'localhost', "192.168.1.2", "api.shrestha-nischal.com.np"]
 
