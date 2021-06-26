@@ -2,7 +2,7 @@
 pkill -f uwsgi -9
 mkdir expensetracker-backend
 cd ./expensetracker-backend
-git clone https://github.com/nischalstha9/ExpenseTracker .
+git clone git@github.com:nischalstha9/ExpenseTracker.git .
 git checkout AccountBook
 git pull origin AccountBook
 # pipenv shell
