@@ -5,7 +5,7 @@ services:
     restart: always
     build:
         context: .
-    container_name: expense_tracker_container
+    container_name: expense_tracker_api_container
     command: sh /opt/app/backend/run.sh
     ports:
       [8010:8002]
