@@ -1,6 +1,14 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - /home/ubuntu/ExpenseTracker-backend/DockerData/postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=expense_tracker
   web:
     restart: always
     build:
