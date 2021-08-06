@@ -238,7 +238,7 @@ CORS_ALLOWED_ORIGINS = [
     # "http://localhost:8000",
     "https://aakogako.herokuapp.com"
 ]
-# SECURE_SSL_REDIRECT=True
+SECURE_SSL_REDIRECT=True
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS=True
 django_heroku.settings(locals())
