@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from .models import AccountBook, Transaction
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.filters import SearchFilter
-from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from django_filters import rest_framework as filters
 from rest_framework.permissions import BasePermission
@@ -26,10 +26,6 @@ class IsTransactionOwner(BasePermission):
         return obj.account_book.user == request.user
 
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 10
 
 class AccountBookListCreateAPIView(ListCreateAPIView):
     model = AccountBook
@@ -68,7 +64,7 @@ class TransactionListCreateAPIView(ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ['description']
     permission_classes = [IsAuthenticated, IsAccountBookOwner]
-    pagination_class = StandardResultsSetPagination
+    pagination_class = LimitOffsetPagination
     filterset_fields = {
         'date': ['gte', 'lte', 'date__range'], '_type': {'exact'}, }
     queryset = Transaction.objects.all()

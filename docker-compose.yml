@@ -1,14 +1,22 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - /home/ubuntu/ExpenseTracker-backend/DockerData/postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=expense_tracker
   web:
     restart: always
     build:
         context: .
-    container_name: expense_tracker_container
+    container_name: expense_tracker_api_container
     command: sh /opt/app/backend/run.sh
     ports:
-      [8010:8002]
+      [9010:8002]
     volumes:
-      - /home/ubuntu/ExpenseTracker/DockerData/static:/opt/app/backend/static/ #for static files
-      - /home/ubuntu/ExpenseTracker/DockerData/media:/opt/app/backend/media/ #for media files
+      - /home/ubuntu/ExpenseTracker-backend/DockerData/static:/opt/app/backend/static/ #for static files
+      - /home/ubuntu/ExpenseTracker-backend/DockerData/media:/opt/app/backend/media/ #for media files
