@@ -27,7 +27,6 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 function App() {
   const dispatch = useDispatch();
-  // RefreshAccountBooks();
   if (token) {
     dispatch(log_in());
     dispatch(insert_user(user));
@@ -40,9 +39,9 @@ function App() {
 
         <Switch>
           <div className="motherboard">
-            <ProtectedRoute path="/logout" component={Logout} />
-            <Route path="/register" component={Register} />
-            <Route path="/login" component={Login} />
+            <Route path="/logout" component={Logout} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
             {/* <Route path="/forget-password" component={ForgetPassword} /> */}
             {/* <Route path="/register" component={Register} /> */}
             <Route exact path="/">

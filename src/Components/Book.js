@@ -15,7 +15,6 @@ const Book = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dataCount, setdataCount] = React.useState(0);
-  // const [pages, setPages] = useState(1);
   const [query, setQuery] = useState("");
   const [sdate, setSDate] = useState("");
   const [edate, setEDate] = useState("");

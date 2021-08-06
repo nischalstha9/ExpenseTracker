@@ -10,9 +10,9 @@ const Logout = () => {
     axiosInstance.post("auth/logout/").then((resp) => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("user");
-      dispatch(log_out());
       dispatch(insert_user({}));
       dispatch(remove_books());
+      dispatch(log_out());
     });
   }, []);
 

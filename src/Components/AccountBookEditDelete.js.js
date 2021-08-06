@@ -19,9 +19,7 @@ export default function DeleteAccountBookModal() {
       withCredentials: true,
     })
       .then((resp) => {
-        console.log(resp);
         setAccountBook(resp.data);
-        console.log(accountBook);
       })
       .catch((err) => console.log(err));
   }, []);
