@@ -1,9 +1,9 @@
-import React, { useState, useEffect, startTransition } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../AxiosInstance";
 import Transaction from "./Transaction";
 import AddTransactionModal from "./Modals/AddTransactionModal";
-import Pagination from "@material-ui/lab/Pagination";
+import CustomTablePagination from "./CustomTablePagination";
 import { ButtonGroup } from "@material-ui/core";
 
 const Book = () => {
@@ -12,14 +12,18 @@ const Book = () => {
   const [bookDetail, setBookDetail] = useState([]);
 
   const [transactionType, setTransactionType] = useState("");
-  const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(1);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [dataCount, setdataCount] = React.useState(0);
+  // const [pages, setPages] = useState(1);
   const [query, setQuery] = useState("");
   const [sdate, setSDate] = useState("");
   const [edate, setEDate] = useState("");
   const [refresher, setRefresher] = useState(0);
 
-  let url = `account-books/${account_id}/transactions/?page=${page}&_type=${transactionType}&search=${query}&date__gte=${sdate}&date__lte=${edate}`;
+  let url = `account-books/${account_id}/transactions/?limit=${rowsPerPage}&offset=${
+    page * rowsPerPage
+  }&_type=${transactionType}&search=${query}&date__gte=${sdate}&date__lte=${edate}`;
 
   const RefreshForm = () => {
     setRefresher(refresher + 1);
@@ -40,12 +44,21 @@ const Book = () => {
       .catch((err) => console.log(err));
   }, [refresher, account_id]);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value));
+    setPage(0);
+  };
+
   useEffect(() => {
     axiosInstance
       .get(url)
       .then((resp) => {
-        setPages(Math.ceil(resp.data.count / 10));
         setTransactions(resp.data.results);
+        setdataCount(resp.data.count);
       })
       .catch((err) => console.log(err));
   }, [url, refresher, account_id]);
@@ -61,7 +74,6 @@ const Book = () => {
         /-
       </h4>
       <hr />
-
       <form
         action=""
         method="get"
@@ -149,7 +161,7 @@ const Book = () => {
                 setTransactionType("");
               }}
             >
-              clear
+              CLEAR
             </button>
           </div>
           <div className="row mx-2">
@@ -168,7 +180,6 @@ const Book = () => {
           </div>
         </div>
       </form>
-
       <hr />
       <table className="table">
         <thead>
@@ -200,16 +211,13 @@ const Book = () => {
           })}
         </tbody>
       </table>
-      {pages > 1 ? (
-        <Pagination
-          count={pages}
-          color="primary"
-          onChange={(e, page) => setPage(page)}
-          page={page}
-        />
-      ) : (
-        ""
-      )}
+      <CustomTablePagination
+        dataCount={dataCount}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+      />
     </div>
   );
 };

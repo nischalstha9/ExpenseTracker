@@ -21,9 +21,6 @@ import Book from "./Components/Book";
 import ConfirmDeleteModal from "./Components/AccountBookEditDelete.js.js";
 import MyAccount from "./Components/auth/MyAccount";
 import ChangePassword from "./Components/auth/ChangePassword";
-// import "bootstrap/dist/js/bootstrap.bundle";
-
-// import "bootstrap/dist/css/bootstrap.min.css";
 
 const token = localStorage.getItem("access_token");
 const user = JSON.parse(localStorage.getItem("user"));
@@ -79,8 +76,8 @@ function App() {
             />
           </div>
         </Switch>
+        <Footer />
       </Router>
-      <Footer />
     </div>
   );
 }
