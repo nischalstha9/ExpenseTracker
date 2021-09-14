@@ -21,6 +21,7 @@ import Book from "./Components/Book";
 import ConfirmDeleteModal from "./Components/AccountBookEditDelete.js.js";
 import MyAccount from "./Components/auth/MyAccount";
 import ChangePassword from "./Components/auth/ChangePassword";
+import { Container } from "@material-ui/core";
 
 const token = localStorage.getItem("access_token");
 const user = JSON.parse(localStorage.getItem("user"));
@@ -38,7 +39,7 @@ function App() {
         <Header />
 
         <Switch>
-          <div className="motherboard">
+          <Container className="motherboard">
             <Route path="/logout" component={Logout} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
@@ -73,7 +74,7 @@ function App() {
               path="/change-password"
               component={ChangePassword}
             />
-          </div>
+          </Container>
         </Switch>
         <Footer />
       </Router>

@@ -1,38 +1,85 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../AxiosInstance";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Transaction from "./Transaction";
 import AddTransactionModal from "./Modals/AddTransactionModal";
 import CustomTablePagination from "./CustomTablePagination";
-import { ButtonGroup } from "@material-ui/core";
+import {
+  ButtonGroup,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TextField,
+} from "@material-ui/core";
+import EditTransactionModal from "./Modals/EditTransactionModal";
+import { TableContainer } from "@material-ui/core";
+import { TableHead } from "@material-ui/core";
+import StyledTableRow from "./StyledTableRow";
+
+const useStyles = makeStyles({
+  root: {
+    margin: "0px 5px",
+    padding: "5px",
+  },
+  container: {},
+  formEntity: {
+    // padding: "0px 5px",
+  },
+});
 
 const Book = () => {
+  const classes = useStyles();
   let { account_id } = useParams();
   const [transactions, setTransactions] = useState([]);
   const [bookDetail, setBookDetail] = useState([]);
-
-  const [transactionType, setTransactionType] = useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dataCount, setdataCount] = React.useState(0);
-  const [query, setQuery] = useState("");
-  const [sdate, setSDate] = useState("");
-  const [edate, setEDate] = useState("");
   const [refresher, setRefresher] = useState(0);
+
+  const initialFilter = Object.freeze({
+    type: "",
+    sdate: "",
+    edate: "",
+    search: "",
+  });
+  const [filterForm, setFilterForm] = React.useState(initialFilter);
+  const handleFormChange = (e) => {
+    let value = e.target.value;
+    if (e.target.name === "sdate" || e.target.name === "edate") {
+      let date;
+      try {
+        date = new Date(value).toISOString();
+      } catch {
+        date = "";
+      }
+      setFilterForm({
+        ...filterForm,
+        [e.target.name]: date,
+      });
+    } else {
+      setFilterForm({
+        ...filterForm,
+        [e.target.name]: value.trim(),
+      });
+    }
+  };
 
   let url = `account-books/${account_id}/transactions/?limit=${rowsPerPage}&offset=${
     page * rowsPerPage
-  }&_type=${transactionType}&search=${query}&date__gte=${sdate}&date__lte=${edate}`;
+  }&_type=${filterForm.type}&search=${filterForm.search}&date__gte=${
+    filterForm.sdate || ""
+  }&date__lte=${filterForm.edate || ""}`;
 
   const RefreshForm = () => {
     setRefresher(refresher + 1);
   };
-  useEffect(() => {
-    setPage(1);
-    setTransactionType("");
-    setSDate("");
-    setEDate("");
-  }, [account_id]);
 
   useEffect(() => {
     axiosInstance
@@ -51,6 +98,12 @@ const Book = () => {
     setRowsPerPage(parseInt(event.target.value));
     setPage(0);
   };
+
+  const types = [
+    { value: "", title: "All Transaction" },
+    { value: "DEBIT", title: "Income" },
+    { value: "CREDIT", title: "Expenses" },
+  ];
 
   useEffect(() => {
     axiosInstance
@@ -77,139 +130,138 @@ const Book = () => {
         action=""
         method="get"
         id="filter-form"
-        className="form-control"
+        className={classes.root}
         onSubmit={(e) => e.preventDefault()}
       >
-        <div className="form-row">
-          <div className="form-group col-md-4">
-            <label htmlFor="inputState">
-              <h6>Type:</h6>
-            </label>
-            <select
-              className="custom-select"
-              id="Transasction_Filter"
-              onChange={(e) => {
-                setPage(1);
-                setTransactionType(e.target.value);
-              }}
-            >
-              <option value="">All Transactions</option>
-              <option value="DEBIT">Income</option>
-              <option value="CREDIT">Expenses</option>
-            </select>
-          </div>
-
-          <div className="form-group col-md-4">
-            <label htmlFor="sdate-filter">
-              <h6>Start Date:</h6>
-            </label>
-            <input
-              type="date"
-              autoComplete="false"
-              className="form-control"
-              id="sdate-filter"
-              onChange={(e) => {
-                setPage(1);
-                setSDate(`${e.target.value}T00:00:00`);
-              }}
-            />
-          </div>
-
-          <div className="form-group col-md-4">
-            <label htmlFor="edate-filter">
-              <h6>End Date:</h6>
-            </label>
-            <input
-              type="date"
-              autoComplete="false"
-              className="form-control"
-              id="edate-filter"
-              onChange={(e) => {
-                setPage(1);
-                setEDate(`${e.target.value}T00:00:00`);
-              }}
-            />
-          </div>
-
-          <div className="form-group col-md-4">
-            <input
-              type="text"
-              autoComplete="false"
-              className="form-control"
-              id="search-filter"
-              placeholder="Search By Description"
-              onKeyUp={(e) => {
-                if (e.code === "Enter") {
-                  setPage(1);
-                  setQuery(e.target.value);
-                }
-              }}
-            />
-          </div>
-
-          <div className="">
-            <button
-              type="reset"
-              autoComplete="false"
-              className="btn btn-secondary"
-              id="clear-filter"
-              onClick={(e) => {
-                setEDate("");
-                setSDate("");
-                setQuery("");
-                setTransactionType("");
-              }}
-            >
-              CLEAR
-            </button>
-          </div>
-          <div className="row mx-2">
-            <ButtonGroup>
-              <AddTransactionModal
-                account_book={account_id}
-                _type="DEBIT"
-                refreshForm={RefreshForm}
+        <Grid container lg={12}>
+          <Grid
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            className={classes.formEntity}
+            spacing={"1px"}
+          >
+            <FormControl fullWidth>
+              <label htmlFor="sdate">Transaction Type:</label>
+              <br />
+              <Select
+                variant="outlined"
+                id="type"
+                name="type"
+                type="text"
+                displayEmpty
+                value={filterForm.type}
+                onChange={handleFormChange}
+              >
+                {types.map((type) => (
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            className={classes.formEntity}
+            spacing={"1px"}
+          >
+            <FormControl fullWidth>
+              <label htmlFor="sdate">Start Date:</label>
+              <br />
+              <TextField
+                type="date"
+                name="sdate"
+                variant="outlined"
+                onChange={(e) => {
+                  handleFormChange(e);
+                }}
+              ></TextField>
+            </FormControl>
+          </Grid>
+          <Grid
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            className={classes.formEntity}
+            spacing={"1px"}
+          >
+            <FormControl fullWidth>
+              <label htmlFor="sdate">End Date:</label>
+              <br />
+              <TextField
+                type="date"
+                name="edate"
+                variant="outlined"
+                onChange={(e) => {
+                  handleFormChange(e);
+                }}
+              ></TextField>
+            </FormControl>
+          </Grid>
+          <Grid
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            className={classes.formEntity}
+            spacing={"1px"}
+          >
+            <FormControl fullWidth>
+              <label htmlFor="sdate">Search:</label>
+              <br />
+              <TextField
+                variant="outlined"
+                name="search"
+                onKeyUp={(e) => {
+                  if (e.code === "Enter") {
+                    setPage(0);
+                    handleFormChange(e);
+                  }
+                }}
               />
-              <AddTransactionModal
-                account_book={account_id}
-                _type="CREDIT"
-                refreshForm={RefreshForm}
-              />
-            </ButtonGroup>
-          </div>
-        </div>
+            </FormControl>
+          </Grid>
+        </Grid>
       </form>
       <hr />
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col" className="bg-white sticky-top">
-              Date
-            </th>
-            <th scope="col" className="bg-white col-6 sticky-top">
-              Description
-            </th>
-            <th scope="col" className="bg-white sticky-top">
-              Amount
-            </th>
-            <th scope="col" className="bg-white sticky-top">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-          {transactions.map((transaction) => {
-            return (
-              <Transaction
-                tran={transaction}
-                key={transaction.id}
-                account_book={account_id}
-                RefreshFrom={RefreshForm}
-              />
-            );
-          })}
-        </tbody>
-      </table>
+      <TableContainer>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <b>Date</b>
+              </TableCell>
+              <TableCell>
+                <b>Description</b>
+              </TableCell>
+              <TableCell>
+                <b>Amount</b>
+              </TableCell>
+              <TableCell>
+                <b>Action</b>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {transactions.map((trans) => {
+              return (
+                <StyledTableRow
+                  trans={trans}
+                  accountBook={account_id}
+                  refreshForm={RefreshForm}
+                />
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
       <CustomTablePagination
         dataCount={dataCount}
         rowsPerPage={rowsPerPage}

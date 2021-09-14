@@ -31,7 +31,6 @@ export default function EditTransactionModal({
       }
     )
       .then((resp) => {
-        console.log(resp);
         handleClose();
         refreshForm();
       })

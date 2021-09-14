@@ -59,7 +59,6 @@ export default function SignIn() {
     initialValues: { username: "", password: "" },
     onSubmit: (values) => {
       setProcessing(true);
-      console.log(values);
       AxiosInstance.post(`auth/login/`, values, {
         withCredentials: true,
       })
