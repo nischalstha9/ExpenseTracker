@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../AxiosInstance";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Transaction from "./Transaction";
+import { makeStyles } from "@material-ui/core/styles";
 import AddTransactionModal from "./Modals/AddTransactionModal";
 import CustomTablePagination from "./CustomTablePagination";
 import {
-  ButtonGroup,
+  Button,
   FormControl,
   Grid,
   MenuItem,
@@ -17,12 +16,11 @@ import {
   TableRow,
   TextField,
 } from "@material-ui/core";
-import EditTransactionModal from "./Modals/EditTransactionModal";
 import { TableContainer } from "@material-ui/core";
 import { TableHead } from "@material-ui/core";
 import StyledTableRow from "./StyledTableRow";
 
-const useStyles = makeStyles({
+export const useStyles = makeStyles({
   root: {
     margin: "0px 5px",
     padding: "5px",
@@ -30,6 +28,18 @@ const useStyles = makeStyles({
   container: {},
   formEntity: {
     // padding: "0px 5px",
+  },
+  btnHolder: {
+    marginTop: "25px",
+    padding: "5px 25px",
+  },
+  accountTitle: {
+    fontSize: "24px",
+    fontWeight: "600",
+  },
+  accountBalance: {
+    fontSize: "24px",
+    color: "green",
   },
 });
 
@@ -51,6 +61,7 @@ const Book = () => {
   });
   const [filterForm, setFilterForm] = React.useState(initialFilter);
   const handleFormChange = (e) => {
+    setPage(0);
     let value = e.target.value;
     if (e.target.name === "sdate" || e.target.name === "edate") {
       let date;
@@ -116,10 +127,10 @@ const Book = () => {
   }, [url, refresher, account_id]);
   return (
     <div className="container mt-4">
-      <h4>Title: {bookDetail.title}</h4>
-      <h4>
+      <h4 className={classes.accountTitle}>Title: {bookDetail.title}</h4>
+      <h4 className={classes.accountTitle}>
         Balance: Rs.
-        <span id="balance_amt" className="text-success">
+        <span id="balance_amt" className={classes.accountBalance}>
           {" "}
           {bookDetail.balance}
         </span>
@@ -133,14 +144,15 @@ const Book = () => {
         className={classes.root}
         onSubmit={(e) => e.preventDefault()}
       >
-        <Grid container lg={12}>
+        <Grid container lg={12} spacing={1}>
           <Grid
+            item
+            spacing={2}
             xs={12}
             sm={4}
             md={4}
             lg={4}
             className={classes.formEntity}
-            spacing={"1px"}
           >
             <FormControl fullWidth>
               <label htmlFor="sdate">Transaction Type:</label>
@@ -163,12 +175,13 @@ const Book = () => {
             </FormControl>
           </Grid>
           <Grid
+            item
+            spacing={2}
             xs={12}
             sm={4}
             md={4}
             lg={4}
             className={classes.formEntity}
-            spacing={"1px"}
           >
             <FormControl fullWidth>
               <label htmlFor="sdate">Start Date:</label>
@@ -184,12 +197,13 @@ const Book = () => {
             </FormControl>
           </Grid>
           <Grid
+            item
+            spacing={2}
             xs={12}
             sm={4}
             md={4}
             lg={4}
             className={classes.formEntity}
-            spacing={"1px"}
           >
             <FormControl fullWidth>
               <label htmlFor="sdate">End Date:</label>
@@ -205,12 +219,13 @@ const Book = () => {
             </FormControl>
           </Grid>
           <Grid
+            item
+            spacing={2}
             xs={12}
-            sm={4}
-            md={4}
-            lg={4}
+            sm={6}
+            md={6}
+            lg={6}
             className={classes.formEntity}
-            spacing={"1px"}
           >
             <FormControl fullWidth>
               <label htmlFor="sdate">Search:</label>
@@ -218,6 +233,7 @@ const Book = () => {
               <TextField
                 variant="outlined"
                 name="search"
+                placeholder="Type and press enter"
                 onKeyUp={(e) => {
                   if (e.code === "Enter") {
                     setPage(0);
@@ -226,6 +242,45 @@ const Book = () => {
                 }}
               />
             </FormControl>
+          </Grid>
+          <Grid
+            xs={12}
+            sm={6}
+            md={6}
+            lg={6}
+            item
+            spacing={1}
+            container
+            className={classes.btnHolder}
+          >
+            <Grid item spacing={4} xs={4} sm={4} md={4} lg={4}>
+              <Button
+                variant="contained"
+                color="primary"
+                disableElevation
+                fullWidth
+                onClick={(e) => {
+                  setPage(0);
+                  setFilterForm(initialFilter);
+                }}
+              >
+                Clear
+              </Button>
+            </Grid>
+            <Grid item spacing={4} xs={4} sm={4} md={4} lg={4}>
+              <AddTransactionModal
+                account_book={account_id}
+                _type="DEBIT"
+                refreshForm={RefreshForm}
+              />
+            </Grid>
+            <Grid item spacing={4} xs={4} sm={4} md={4} lg={4}>
+              <AddTransactionModal
+                account_book={account_id}
+                _type="CREDIT"
+                refreshForm={RefreshForm}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </form>

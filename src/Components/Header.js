@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     display: "block",
     color: "white",
+    textDecoration: "none",
 
     [theme.breakpoints.up("sm")]: {
       display: "block",

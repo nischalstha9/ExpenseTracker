@@ -41,8 +41,14 @@ export default function AddTransactionModal({
   });
 
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+    <>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleClickOpen}
+        disableElevation
+        fullWidth
+      >
         {_type === "DEBIT" ? "Add Income" : "Add Expense"}
       </Button>
       <Dialog
@@ -86,6 +92,6 @@ export default function AddTransactionModal({
           </DialogActions>
         </form>
       </Dialog>
-    </div>
+    </>
   );
 }

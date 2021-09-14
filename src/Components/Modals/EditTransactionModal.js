@@ -58,8 +58,13 @@ export default function EditTransactionModal({
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Edit
+      <Button
+        variant="outlined"
+        disableElevation
+        color="default"
+        onClick={handleClickOpen}
+      >
+        &#9998;
       </Button>
       <Dialog
         open={open}

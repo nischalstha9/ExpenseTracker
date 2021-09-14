@@ -8,6 +8,7 @@ import AxiosInstance from "../AxiosInstance";
 import { useFormik } from "formik";
 import { useHistory, useParams } from "react-router-dom";
 import Alert from "./Alert";
+import { Button } from "@material-ui/core";
 
 export default function DeleteAccountBookModal() {
   const history = useHistory();
@@ -82,12 +83,14 @@ export default function DeleteAccountBookModal() {
             value={UpdateForm.values.title}
             placeholder="Title"
           />
-          <button
+          <Button
+            variant="contained"
+            color="secondary"
             className="btn btn-warning mt-3"
             onClick={UpdateForm.handleSubmit}
           >
             Update
-          </button>
+          </Button>
         </DialogContent>
       </div>
       <div className="">
@@ -115,12 +118,14 @@ export default function DeleteAccountBookModal() {
             />
           </DialogContent>
           <DialogActions>
-            <button
+            <Button
+              variant="outlined"
+              color="secondary"
               onClick={deleteForm.handleSubmit}
               className="btn btn-outline-danger"
             >
               Confirm Delete
-            </button>
+            </Button>
           </DialogActions>
         </form>
         {alerts.map((alert) => {

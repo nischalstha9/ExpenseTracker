@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
@@ -13,12 +14,14 @@ const MyAccount = () => {
       <h5>{user.username}</h5>
       <h4>Email:</h4>
       <h5>{user.email}</h5>
-      <button
+      <Button
+        variant="outlined"
+        color="secondary"
         className="btn btn-outline-warning"
         onClick={() => history.push("/change-password")}
       >
         Change Password
-      </button>
+      </Button>
     </div>
   );
 };
