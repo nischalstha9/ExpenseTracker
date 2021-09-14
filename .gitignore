@@ -3,5 +3,6 @@ __pycache__/
 Pipfile
 Pipfile.lock
 static/
+staticfiles/
 DockerData/
 .vscode/
