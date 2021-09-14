@@ -32,10 +32,10 @@ urlpatterns = [
     path('api/v1/', include('main.urls')),
     # path('api-auth/', include('rest_framework.urls')),
     # path('profile/', include('Userprofile.urls')),
-    # url(r'^media/(?P<path>.*)$', serve,
-    #     {'document_root': settings.MEDIA_ROOT}),
-    # url(r'^static/(?P<path>.*)$', serve,
-    #     {'document_root': settings.STATIC_ROOT}),
+    url(r'^media/(?P<path>.*)$', serve,
+        {'document_root': settings.MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve,
+        {'document_root': settings.STATIC_ROOT}),
 
 ]
 

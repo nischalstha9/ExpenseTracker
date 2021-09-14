@@ -15,11 +15,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'h&%6kc9vqk22)q+lqzq_14ebsp-d8cpmf3dk(swt_h&+w3_1w^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
+    # '127.0.0.1',
+    # 'localhost',
     'aakogako.herokuapp.com',
     ]
 
@@ -184,9 +184,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "staticfiles")
+    os.path.join(BASE_DIR, "static")
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -236,7 +236,7 @@ CORS_ALLOWED_ORIGINS = [
     # "http://localhost:8000",
     "https://aakogako.herokuapp.com"
 ]
-SECURE_SSL_REDIRECT=True
+# SECURE_SSL_REDIRECT=True
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS=True
 django_heroku.settings(locals())
