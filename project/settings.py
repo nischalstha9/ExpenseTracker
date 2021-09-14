@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'project.urls'
 
@@ -236,7 +236,7 @@ CORS_ALLOWED_ORIGINS = [
     # "http://localhost:8000",
     "https://aakogako.herokuapp.com"
 ]
-# SECURE_SSL_REDIRECT=True
+SECURE_SSL_REDIRECT=True
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS=True
 django_heroku.settings(locals())
