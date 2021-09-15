@@ -14,6 +14,19 @@ export const bookStyles = makeStyles({
     textDecoration: "none",
     padding: "15px 5px",
     minHeight: "100%",
+    backgroundColor: "#e7e7ff;",
+    "&:hover": {
+      backgroundColor: "#cbcbff",
+      transform: "scale(1.1)",
+      transition: "250ms ease-in-out",
+      boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+    },
+    "&:active": {
+      backgroundColor: "#cbcbff",
+      transform: "scale(1.1)",
+      transition: "250ms ease-in-out",
+      boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+    },
   },
   cardTitle: {
     fontSize: "26px",

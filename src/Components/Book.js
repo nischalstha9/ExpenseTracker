@@ -19,6 +19,7 @@ import {
 import { TableContainer } from "@material-ui/core";
 import { TableHead } from "@material-ui/core";
 import StyledTableRow from "./StyledTableRow";
+import { blue } from "@material-ui/core/colors";
 
 export const useStyles = makeStyles({
   root: {
@@ -40,6 +41,11 @@ export const useStyles = makeStyles({
   accountBalance: {
     fontSize: "24px",
     color: "green",
+  },
+  table: {
+    // padding: "10px",
+    // backgroundColor: blue[900],
+    // borderRadius: "5px",
   },
 });
 
@@ -257,6 +263,7 @@ const Book = () => {
               <Button
                 variant="contained"
                 color="primary"
+                type="reset"
                 disableElevation
                 fullWidth
                 onClick={(e) => {
@@ -286,7 +293,7 @@ const Book = () => {
       </form>
       <hr />
       <TableContainer>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell>

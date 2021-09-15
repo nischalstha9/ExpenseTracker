@@ -77,7 +77,7 @@ export default function SignIn() {
           setAlerts([
             {
               message: err.response.data.non_field_errors[0],
-              type: "danger",
+              type: "error",
             },
           ]);
         })

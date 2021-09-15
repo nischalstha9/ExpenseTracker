@@ -11,11 +11,6 @@ const useStyles = makeStyles({
   redRow: {
     backgroundColor: red[200],
   },
-  root: {
-    marginTop: "10px",
-    width: "100%",
-    padding: "10px",
-  },
 });
 
 const StyledTableRow = ({ trans, accountBook, refreshForm }) => {
