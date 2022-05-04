@@ -1,6 +1,8 @@
 # Dockerfile
 
-FROM python:3.8.3-alpine
+# FROM python:3.8.3-alpine
+FROM nischalstha/python_postgres_master:0.1
+
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -9,7 +11,7 @@ ENV PYTHONUNBUFFERED 1
 # install psycopg2 dependencies
 RUN apk update 
 RUN apk add postgresql-dev python3-dev musl-dev build-base py-pip jpeg-dev zlib-dev libffi-dev
-RUN apk add --update --no-cache g++ libxslt-dev
+# RUN apk add --update --no-cache g++ libxslt-dev
 
 RUN pip install --upgrade pip
 # copy source and install dependencies

@@ -20,3 +20,4 @@ services:
     volumes:
       - /home/ubuntu/ExpenseTracker-backend/DockerData/static:/opt/app/backend/static/ #for static files
       - /home/ubuntu/ExpenseTracker-backend/DockerData/media:/opt/app/backend/media/ #for media files
+      - /home/ubuntu/ExpenseTracker-backend/DockerData/index.html:/opt/app/backend/templates/index.html #for index.html
