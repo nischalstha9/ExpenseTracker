@@ -56,5 +56,5 @@ react_views = [
     "profile/",
     "change-password/",
 ]
-
-urlpatterns += [path(i, home, name='homepage') for i in react_views]
+urlpatterns += path('',home, name="react")
+# urlpatterns += [path(i, home, name='homepage') for i in react_views]
