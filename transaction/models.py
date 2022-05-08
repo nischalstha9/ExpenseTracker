@@ -11,9 +11,6 @@ class AccountBook(models.Model):
     created_at = models.DateTimeField(_("Created At"), auto_now=False, auto_now_add=True)
     slug = models.SlugField(_("Slug"), editable=False)
 
-    class Meta:
-        ordering = ["-id"]
-
     def save(self, *args, **kwargs):
         if not self.slug:
             val = self.title

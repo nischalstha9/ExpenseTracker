@@ -19,7 +19,6 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # load_dotenv(os.path.join(BASE_DIR, '.env'))
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -200,12 +199,12 @@ EMAIL_PORT = os.environ.get('EMAIL_PORT')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # SIMPLE JWT
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=os.environ.get("ACCESS_TOKEN_LIFETIME_DAYS", 5)),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=os.environ.get("REFRESH_TOKEN_LIFETIME_DAYS", 15)),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=int(os.environ.get("ACCESS_TOKEN_LIFETIME_DAYS", 5))),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=int(os.environ.get("REFRESH_TOKEN_LIFETIME_DAYS", 15))),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": SECRET_KEY,
+    "SIGNING_KEY": os.environ.get("JWT_SIGNING_KEY", SECRET_KEY),
     "VERIFYING_KEY": None,
     "AUTH_HEADER_TYPES": ("JWT",),
     "USER_ID_FIELD": "id",

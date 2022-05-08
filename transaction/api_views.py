@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from .models import AccountBook, Transaction
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from django_filters import rest_framework as filters
@@ -30,9 +30,11 @@ class IsTransactionOwner(BasePermission):
 class AccountBookListCreateAPIView(ListCreateAPIView):
     model = AccountBook
     serializer_class = AccountBookSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['description']
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['title']
+    ordering_fields = ['created_at']
     permission_classes = [IsAuthenticated]
+    pagination_class = LimitOffsetPagination
     
     def get_queryset(self):
         return AccountBook.objects.filter(user=self.request.user)
