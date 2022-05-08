@@ -6,6 +6,7 @@ media/*
 static/
 DockerData/
 static/*
+/staticfiles/
 !media/default/
 
 pgenv.txt
