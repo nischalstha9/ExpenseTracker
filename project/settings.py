@@ -240,5 +240,7 @@ CELERY_TIMEZONE = os.environ.get("CELERY_TIMEZONE",'UTC')
 CELERY_TASK_TRACK_STARTED = os.environ.get("CELERY_TASK_TRACK_STARTED",True)
 CELERY_TASK_TIME_LIMIT = os.environ.get("CELERY_TASK_TIME_LIMIT",30 * 60)
 
+SECURE_SSL_REDIRECT=os.environ.get("SECURE_SSL_REDIRECT", 1)==1
+
 
 django_heroku.settings(locals())
