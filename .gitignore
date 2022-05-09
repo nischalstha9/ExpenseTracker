@@ -8,7 +8,6 @@ DockerData/
 static/
 staticfiles/
 staticfiles/transaction/
-customstaticfiles/transaction/
 
 !media/default/
 
