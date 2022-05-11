@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: expense-tracker-ingress
+  namespace: expense-tracker
+  annotations:
+    # kubernetes.io/ingress.class: "traefik"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: "api.expensetracker.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: expense-tracker-service
+            port:
+              number: 8000
+  - host: "expensetracker.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: expense-tracker-frontend-service
+            port:
+              number: 8000
+      - path: "/api/"
+        pathType: Prefix
+        backend:
+          service:
+            name: expense-tracker-service
+            port:
+              number: 8000
+      - path: "/admin/"
+        pathType: Prefix
+        backend:
+          service:
+            name: expense-tracker-service
+            port:
+              number: 8000
+      - path: "/static/" # doesnot work because of frontend static path # can be solved by changing STATIC_URL in django settings.py
+        pathType: Prefix
+        backend:
+          service:
+            name: expense-tracker-service
+            port:
+              number: 8000
+  

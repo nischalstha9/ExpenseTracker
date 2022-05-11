@@ -1,0 +1,28 @@
+#internal Service to connect to different pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: expense-tracker-service
+  namespace: expense-tracker
+spec:
+  selector:
+    app: expense-tracker-deployment
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+# ---
+# # external Service to connect from outside host
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: django-base-external-service
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: base-django-deployment
+#   ports:
+#     - protocol: TCP
+#       port: 8000
+#       targetPort: 8000
+#       nodePort: 30000 #this is where you mention browser port (ranges betn 30000-32767)

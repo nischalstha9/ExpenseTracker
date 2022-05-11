@@ -42,19 +42,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-react_views = [
-    # List all your react routes here
-    "",
-    "logout/",
-    "register/",
-    "login/",
-    "accounts/",
-    "manage/accounts/",
-    "manage/accounts/<int:id>/",
-    "create-account-book/",
-    "accounts/<int:id>/",
-    "profile/",
-    "change-password/",
-]
-
-urlpatterns += [path(i, home, name='homepage') for i in react_views]
+# urlpatterns += [re_path(".?", home, name='homepage')]
