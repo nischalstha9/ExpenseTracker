@@ -19,3 +19,4 @@ WORKDIR /opt/app/backend
 ADD ./requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY . .
+ENTRYPOINT [ "sh", "run.sh" ]
