@@ -11,4 +11,6 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN chmod 755 /code/docker-entrypoint.sh
 RUN chmod 755 /code/celery.sh
-#RUN sh ./docker-entrypoint.sh
+EXPOSE 8000
+RUN sh ./docker-entrypoint.sh
+
