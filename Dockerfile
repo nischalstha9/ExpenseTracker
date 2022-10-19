@@ -12,5 +12,5 @@ COPY . .
 RUN chmod 755 /code/docker-entrypoint.sh
 RUN chmod 755 /code/celery.sh
 EXPOSE 8000
-RUN sh ./docker-entrypoint.sh
+#RUN sh ./docker-entrypoint.sh
 
