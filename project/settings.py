@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "SBDVAKLHFKHH@&T#*")
+SECRET_KEY = os.environ.get("SECRET_KEY", "SBDVAKgfkytfkuig$#&%ZLHFKHH@&T#*")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG',True))
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rangefilter',
     'django_admin_listfilter_dropdown',
+    'django_celery_results',
 ]
 # SITE_ID = 1
 
@@ -113,11 +114,11 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DATABASE_NAME"),
-        'USER': os.environ.get("DATABASE_USER"),
-        'PASSWORD': os.environ.get("DATABASE_PASSWORD"),
-        'HOST': os.environ.get("DATABASE_HOST", "127.0.0.1"),
-        'PORT': os.environ.get("DATABASE_PORT", "5432"),
+        'NAME': os.environ.get("PGDATABASE"),
+        'USER': os.environ.get("PGUSER"),
+        'PASSWORD': os.environ.get("PGPASSWORD"),
+        'HOST': os.environ.get("PGHOST", "127.0.0.1"),
+        'PORT': os.environ.get("PGPORT", "5432"),
     }
 }
 
@@ -146,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
@@ -229,9 +230,12 @@ JWT_AUTH_COOKIE = 'access_token'
 JWT_AUTH_REFRESH_COOKIE = 'refresh_token'
 PROJECT_NAME = "Expense Tracker"
 
+
 #CELERY
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+REDIS_URL=f"redis://{os.environ.get('REDISUSER')}:{os.environ.get('REDISPASSWORD')}@{os.environ.get('REDISHOST')}:{int(os.environ.get('REDISPORT'))}"
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND','django-db')
 CELERY_ACCEPT_CONTENT = os.environ.get("CELERY_ACCEPT_CONTENT",['application/json'])
 CELERY_TASK_SERIALIZER = os.environ.get("CELERY_TASK_SERIALIZER",'json')
 CELERY_RESULT_SERIALIZER = os.environ.get("CELERY_RESULT_SERIALIZER",'json')

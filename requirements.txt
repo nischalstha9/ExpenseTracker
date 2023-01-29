@@ -48,3 +48,4 @@ vine==5.0.0
 wcwidth==0.2.5
 wrapt==1.13.3
 gunicorn
+django-celery-results

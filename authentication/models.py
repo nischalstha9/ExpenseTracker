@@ -65,6 +65,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def send_mail(self, **kwargs):
         kwargs['to_email'] = [self.email]
         send_mail_asynchron.delay(**kwargs)
+        # send_mail_asynchron(**kwargs)
         return "success"
 
     def save(self, *args, **kwargs):

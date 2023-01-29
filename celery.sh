@@ -1,2 +1,2 @@
-#!/bin/bash
-celery -A project worker -l INFO
+#!/bin/sh
+celery -A project worker -l DEBUG

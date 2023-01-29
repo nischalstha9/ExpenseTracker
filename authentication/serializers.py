@@ -1,4 +1,3 @@
-from os import write
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenObtainSerializer
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -15,6 +14,7 @@ from .constants import DEFAULT_ASSETS_IMAGES_PATH, ADMIN_DOMAIN, CLIENT_DOMAIN
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
 from django.conf import settings
+
 
 
 class PasswordResetSerializer(serializers.Serializer):
@@ -223,21 +223,23 @@ class CustomerSerializer(serializers.ModelSerializer, CommonUserSerializerMixin)
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
-        if validate_password(password)==None:
+        if password is not None:
             instance.set_password(password)
         instance.save()
+        from django.conf import settings
+        request = self.context.get('request')
+        assets_image_path = str(request.build_absolute_uri(
+            settings.MEDIA_URL + DEFAULT_ASSETS_IMAGES_PATH))
+        domain = ADMIN_DOMAIN
         try:
-            from django.conf import settings
-            request = self.context.get('request')
-            assets_image_path = str(request.build_absolute_uri(
-                settings.MEDIA_URL + DEFAULT_ASSETS_IMAGES_PATH))
-            domain = CLIENT_DOMAIN
-            send_register_mail(instance, domain, assets_image_path, UserTokenSerializer, 'register-confirm-admin.html')
+            send_register_mail(instance, domain, assets_image_path,
+                               UserTokenSerializer, 'register-confirm-admin.html')
         except Exception:
             instance.delete()
             raise serializers.ValidationError(
                 {"detail": "Error in creating token"})
         return instance
+
 
     def update(self, instance, validated_data):
         if('password' in [x for x in validated_data]):
