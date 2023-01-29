@@ -233,7 +233,7 @@ PROJECT_NAME = "Expense Tracker"
 
 #CELERY
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
-REDIS_URL=f"redis://{os.environ.get('REDISUSER')}:{os.environ.get('REDISPASSWORD')}@{os.environ.get('REDISHOST')}:{int(os.environ.get('REDISPORT'))}"
+REDIS_URL=f"redis://{os.environ.get('REDISUSER')}:{os.environ.get('REDISPASSWORD')}@{os.environ.get('REDISHOST')}:{os.environ.get('REDISPORT')}"
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND','django-db')
 CELERY_ACCEPT_CONTENT = os.environ.get("CELERY_ACCEPT_CONTENT",['application/json'])
