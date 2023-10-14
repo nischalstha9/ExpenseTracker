@@ -12,8 +12,8 @@ EMAIL_HOST='smtp.gmail.com'
 EMAIL_HOST_USER='utube.nischal@gmail.com'
 EMAIL_HOST_PASSWORD='asd'
 EMAIL_PORT=587
-CLIENT_URL='https://expensetracker.up.railway.app/admin/'
-ADMIN_URL='https://expensetracker.shrestha-nischal.com.np'
+ADMIN_URL='https://etracker-api.shrestha-nischal.com.np/admin/'
+CLIENT_URL='https://expensetracker.shrestha-nischal.com.np'
 
 CELERY_TIMEZONE=Asia/Kathmandu
 

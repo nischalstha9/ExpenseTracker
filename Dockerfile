@@ -12,6 +12,5 @@ COPY . .
 RUN chmod 755 /code/docker-entrypoint.sh
 RUN chmod 755 /code/celery.sh
 EXPOSE 8000
-RUN sh ./docker-entrypoint.sh
-CMD [ "python3", "manage.py", "runserver", "0.0.0.0:8000" ]
+ENTRYPOINT [ "/code/docker-entrypoint.sh" ]
 

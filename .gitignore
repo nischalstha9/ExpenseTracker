@@ -13,3 +13,5 @@ env.txt
 ./DockerData
 
 *.pgerd
+
+docker-compose.yml
